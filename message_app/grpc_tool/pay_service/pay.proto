@@ -1,0 +1,49 @@
+syntax = "proto3";
+package weixin;
+
+message json {
+  string text = 1;
+}
+
+//微信支付
+service WeixinPay {   //定义服务,用在rpc传输中
+  //查询订单
+  rpc OrderQuery(json) returns (json){}
+
+  //统一下单
+  rpc UnifiedOrder(json) returns (json){}
+
+  //关闭订单
+  rpc CloseOrder(json) returns (json){}
+
+  //退款
+  rpc Refund(json) returns (json){}
+  //退款查询
+  rpc RefundQuery(json) returns (json){}
+
+  //付款码支付
+  rpc Micropay(json) returns (json){}
+}
+
+//支付宝支付
+service AliPay {   //定义服务,用在rpc传输中
+  //面对面付款码支付
+  rpc FacePay(json) returns (json){}
+
+  //预创建订单，适用扫码支付
+  rpc Precreate(json) returns (json){}
+
+  //app支付 
+  rpc AppPay(json) returns (json){}
+
+  //订单查询
+  rpc OrderQuery(json) returns (json){}
+
+  //退款
+  rpc Refund(json) returns (json){}
+
+}
+//藏历
+service TibetanCalendar{
+    rpc QueryCalendar(json) returns (json){}
+}
