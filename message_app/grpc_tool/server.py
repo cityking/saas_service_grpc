@@ -17,7 +17,7 @@ from redis_tool import RedisConnector
 
 _ONE_DAY_IN_SECONDS = 60 * 60 * 24
 _HOST = '0.0.0.0'
-_PORT = '8803'
+_PORT = '8801'
 
 import hashlib
 cache_conn = RedisConnector().CacheRedis
@@ -130,6 +130,7 @@ class MessageCharge(data_pb2_grpc.MessageChargeServicer):
         business_id = data['business_id']
         business = Business.objects.get(id=business_id)
         business.msg_num -= 1
+        business.save()
         MsgRecord.objects.create(**data)
         return dict(status='success')
 
