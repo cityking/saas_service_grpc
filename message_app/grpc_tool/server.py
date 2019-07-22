@@ -7,7 +7,7 @@ import django
 import datetime
 import requests
 from concurrent import futures
-sys.path.append('/Users/cityking/workspace/company/jetcloud_saas/saas_servcie')
+sys.path.append('/new_dev/test_workspace/saas_service')
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'saas_servcie.settings')
 django.setup()
 
@@ -97,7 +97,7 @@ class MessageCharge(data_pb2_grpc.MessageChargeServicer):
         print('start QueryBusinessInfo')
         print(request.text)
         data = json.loads(request.text)
-        if 'business_id' in data: 
+        if 'business_id' in data:
             business_id = data['business_id']
             business = Business.objects.filter(id=business_id).first()
         elif 'business_name' in data:
@@ -108,7 +108,7 @@ class MessageCharge(data_pb2_grpc.MessageChargeServicer):
             return dict(status='success', business_info=business.get_info())
         else:
             return dict(status='fail', msg='商户不存在')
-            
+
     @json_response
     def QueryOrderList(self, request, context):
         print('start QueryOrderList')
@@ -124,7 +124,7 @@ class MessageCharge(data_pb2_grpc.MessageChargeServicer):
 
         order_list = [order.get_info() for order in orders]
         return dict(status='success', order_list=order_list, count=count)
- 
+
 def serve():
     # 定义服务器并设置最大连接数,corcurrent.futures是一个并发库，类似于线程池的概念
     grpcServer = grpc.server(futures.ThreadPoolExecutor(max_workers=4))   # 创建一个服务器

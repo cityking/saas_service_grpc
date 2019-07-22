@@ -4,7 +4,8 @@ from django.utils.encoding import escape_uri_path
 from django.views import View
 from django.contrib.auth.hashers import make_password, check_password
 from django.db.models import Q
-from pay_app.models import WeixinPay
+from pay_app.message_grpc.client import check_order
+from pay_app.models import WeixinPay, xml_to_dict
 import datetime
 import random
 import os
@@ -87,8 +88,24 @@ class WeixinMicropayView(View):
 
 class PayCallbackView(View):
     def post(self, req):
-        import pdb;pdb.set_trace()
+        data = req.POST
+        if 'trade_status' in data and data['trade_status'] == 'TRADE_SUCCESS':
+            out_trade_no = data['out_trade_no']
+            check_order(1, out_trade_no)
+            return HttpResponse("success")
+        else:
+            if not data:
+                data = req.body.decode()
+                data = xml_to_dict(data)
+                if data['result_code'] == 'SUCCESS' and data['return_code'] == 'SUCCESS':
+                    out_trade_no = data['out_trade_no']
+                    check_order(1, out_trade_no)
+                    return HttpResponse('<xml> <return_code><![CDATA[SUCCESS]]></return_code> <return_msg><![CDATA[OK]]></return_msg> </xml>')
+
+            return HttpResponse(status=400)
     def get(self, req):
+        data = req.GET
+        print(data)
         import pdb;pdb.set_trace()
 
 

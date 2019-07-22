@@ -10,6 +10,8 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'saas_servcie.settings')
 django.setup()
 
 from grpc_tool import pay_pb2, pay_pb2_grpc
+from tools import tools_pb2, tools_pb2_grpc
+from tools.handler import ToolsHandler
 from redis_tool import RedisConnector
 from pay_app.models import WeixinPay as WeixinPayM, AliPay as AliPayM
 
@@ -38,7 +40,7 @@ def pre_request_weixin_pay(func):
             data = dict(return_code=return_code,
                     return_msg=return_msg)
             data = json.dumps(data)
-            return pay_pb2.json(text=data) 
+            return pay_pb2.json(text=data)
         pay = WeixinPayM.objects.filter(app_id=app_id).first()
 
 
@@ -51,11 +53,11 @@ def pre_request_weixin_pay(func):
     return wrapper
 def err_rsp(msg=None):
     return_code = 'FAIL'
-    return_msg = msg 
+    return_msg = msg
     data = dict(return_code=return_code,
             return_msg=return_msg)
     data = json.dumps(data)
-    return pay_pb2.json(text=data) 
+    return pay_pb2.json(text=data)
 def pre_request_ali_pay(func):
     """微信支付"""
     def wrapper(view, request, context):
@@ -67,7 +69,7 @@ def pre_request_ali_pay(func):
             data = dict(return_code=return_code,
                     return_msg=return_msg)
             data = json.dumps(data)
-            return pay_pb2.json(text=data) 
+            return pay_pb2.json(text=data)
         pay = AliPayM.objects.filter(app_id=app_id).first()
 
 
@@ -174,9 +176,9 @@ class TibetanCalendar(pay_pb2_grpc.TibetanCalendarServicer):
             res = requests.post(url, data=data).text
             cache_conn.hset(key, l_key, res)
 
-        end = datetime.datetime.now() 
+        end = datetime.datetime.now()
         print(end-start)
-        
+
         return pay_pb2.json(text=res)  # 返回一个类实例
 
 def serve():
@@ -187,6 +189,9 @@ def serve():
     pay_pb2_grpc.add_WeixinPayServicer_to_server(WeixinPay(), grpcServer)
     pay_pb2_grpc.add_AliPayServicer_to_server(AliPay(), grpcServer)
     pay_pb2_grpc.add_TibetanCalendarServicer_to_server(TibetanCalendar(), grpcServer)
+
+    #短信服务等
+    tools_pb2_grpc.add_ToolsServerServicer_to_server(ToolsHandler(), grpcServer)
 
     grpcServer.add_insecure_port(_HOST + ':' + _PORT)    # 添加监听端口
     grpcServer.start()    #  启动服务器

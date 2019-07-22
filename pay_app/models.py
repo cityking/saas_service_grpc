@@ -23,6 +23,13 @@ class WeixinPayError(Exception):
     def __init__(self, msg):
         super(WeixinPayError, self).__init__(msg)
 
+def xml_to_dict(content):
+        raw = {}
+        root = etree.fromstring(content)
+        for child in root:
+            raw[child.tag] = child.text
+        return raw
+
 class Map(dict):
     """
     提供字典的dot访问模式
@@ -82,7 +89,7 @@ class WeixinPay(models.Model):
     mch_id = models.CharField(max_length=20)
     mch_key = models.CharField(max_length=50)
     notify_url = models.CharField(max_length=100, null=True,blank=True,
-            verbose_name='回调链接') 
+            verbose_name='回调链接')
     cert_key = models.FileField('证书key', null=True, blank=True,
             upload_to=key_path)
     cert = models.FileField('证书', null=True, blank=True, upload_to=cert_path)
@@ -92,7 +99,7 @@ class WeixinPay(models.Model):
 
     @property
     def sess(self):
-        return requests.Session() 
+        return requests.Session()
 
     @property
     def nonce_str(self):
@@ -169,9 +176,9 @@ class WeixinPay(models.Model):
 
     def micropay(self, data):
         """
-        提交付款码支付 
+        提交付款码支付
         body 店名-销售商品类目
-        out_trade_no 
+        out_trade_no
         total_fee
         spbill_create_ip
         auth_code
@@ -255,7 +262,7 @@ class WeixinPay(models.Model):
             raise WeixinPayError("对账单接口中，缺少必填参数bill_date")
 
         return self._fetch(url, data)
- 
+
 
 
     class Meta:
@@ -267,7 +274,7 @@ class AliPay(models.Model):
     name = models.CharField(max_length=20,verbose_name='名称')
     app_id = models.CharField(max_length=20)
     notify_url = models.CharField(max_length=100, null=True,blank=True,
-            verbose_name='回调链接') 
+            verbose_name='回调链接')
     ali_pub_key = models.TextField('证书ali_pub_key', null=True, blank=True)
     app_pri_key = models.TextField('证书app_pri_key', null=True, blank=True)
     app_pub_key = models.TextField('证书app_pub_key', null=True, blank=True)
@@ -339,7 +346,7 @@ class AliPay(models.Model):
         for k, v in data.items():
             data[k] = urllib.parse.quote(v)
         data = self.dict_sort(data) + '&sign=' + urllib.parse.quote(sign)
-        
+
         res = requests.get(url=self.refund_url, params=data).json()
         return res
         # import pdb;pdb.set_trace()
