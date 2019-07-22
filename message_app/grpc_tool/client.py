@@ -2,9 +2,11 @@ import grpc
 import json
 import charge_pb2 as data_pb2, charge_pb2_grpc as data_pb2_grpc
 
-_HOST = 'localhost'
-_PORT = '8800'
+#_HOST = 'localhost'
+#_PORT = '8800'
 
+_HOST = '120.77.237.231'
+_PORT = '9274'
 conn = grpc.insecure_channel(_HOST + ':' + _PORT)
 
 def get_chargeinfo(business_id):
@@ -67,7 +69,7 @@ def query_orderlist(business_id):
 if __name__ == '__main__':
 #    data = get_chargeinfo(1)
 #    data = check_order(1, '15633887877173738')
-    data = unified_order(1, 100, 0.01, 1)
+    data = unified_order(1, 100, 0.01, 2)
 #    data = query_businessinfo(1)
 #    data = query_orderlist(1)
     print(data)

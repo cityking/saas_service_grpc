@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'pay_app',
     'message_app',
+    'live_app',
 ]
 
 MIDDLEWARE = [
