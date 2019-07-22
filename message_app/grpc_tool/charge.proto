@@ -27,6 +27,27 @@ service MessageCharge {   //定义服务,用在rpc传输中
      }
   */
 
+  rpc AddMsgSendRecord(json) returns (json){}
+  /*添加短信发送记录
+  请求示例：
+    {
+    	"business_id": 1,
+    	"phone": "18233228976",
+    	"content": "skjjksjkjkk"
+    }   
+  返回示例：
+     {
+    	"status": "success",
+    	"business_info": {
+    		"business_id": 1,
+    		"name": "喵哆旺",
+    		"msg_num": 10
+    	}
+     }
+  */
+
+
+
   rpc GetChargeInfo(json) returns (json){}
   /*获取充值套餐及可使用的支付方式
   参数：business_id
