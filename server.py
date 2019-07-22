@@ -10,8 +10,14 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'saas_servcie.settings')
 django.setup()
 
 from grpc_tool import pay_pb2, pay_pb2_grpc
+from message_app.grpc_tool import charge_pb2, charge_pb2_grpc
+from live_app.grpc_tool import live_pb2, live_pb2_grpc
+
 from redis_tool import RedisConnector
 from pay_app.models import WeixinPay as WeixinPayM, AliPay as AliPayM
+from message_app.grpc_tool import server as message_server
+from live_app.grpc_tool import server as live_server
+
 
 _ONE_DAY_IN_SECONDS = 60 * 60 * 24
 _HOST = '0.0.0.0'
@@ -187,6 +193,14 @@ def serve():
     pay_pb2_grpc.add_WeixinPayServicer_to_server(WeixinPay(), grpcServer)
     pay_pb2_grpc.add_AliPayServicer_to_server(AliPay(), grpcServer)
     pay_pb2_grpc.add_TibetanCalendarServicer_to_server(TibetanCalendar(), grpcServer)
+
+    charge_pb2_grpc.add_MessageChargeServicer_to_server(message_server.MessageCharge(),
+            grpcServer)
+
+    live_pb2_grpc.add_LiveManagementServicer_to_server(live_server.LiveManagement(), grpcServer)
+    live_pb2_grpc.add_LiveStreamManagementServicer_to_server(live_server.LiveStreamManagement(), grpcServer)
+    live_pb2_grpc.add_PlayBackManagementServicer_to_server(live_server.PlayBackManagement(), grpcServer)
+
 
     grpcServer.add_insecure_port(_HOST + ':' + _PORT)    # 添加监听端口
     grpcServer.start()    #  启动服务器

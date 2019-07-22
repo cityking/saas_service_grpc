@@ -3,7 +3,7 @@ import json
 import charge_pb2 as data_pb2, charge_pb2_grpc as data_pb2_grpc
 
 _HOST = 'localhost'
-_PORT = '8803'
+_PORT = '9900'
 
 #_HOST = '120.77.237.231'
 #_PORT = '9274'
@@ -72,7 +72,6 @@ def add_send_record(business_id, phone, content):
             content=content)
     print(data)
     text = json.dumps(data)
-    import pdb;pdb.set_trace()
     response = client.AddMsgSendRecord.future(data_pb2.json(text=text))
     response = response.result()
     data = json.loads(response.text) 
