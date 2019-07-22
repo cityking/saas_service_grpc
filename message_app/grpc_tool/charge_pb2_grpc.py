@@ -23,6 +23,11 @@ class MessageChargeStub(object):
         request_serializer=charge__pb2.json.SerializeToString,
         response_deserializer=charge__pb2.json.FromString,
         )
+    self.AddMsgSendRecord = channel.unary_unary(
+        '/message_app.MessageCharge/AddMsgSendRecord',
+        request_serializer=charge__pb2.json.SerializeToString,
+        response_deserializer=charge__pb2.json.FromString,
+        )
     self.GetChargeInfo = channel.unary_unary(
         '/message_app.MessageCharge/GetChargeInfo',
         request_serializer=charge__pb2.json.SerializeToString,
@@ -54,6 +59,13 @@ class MessageChargeServicer(object):
   """
 
   def QueryBusinessInfo(self, request, context):
+    # missing associated documentation comment in .proto file
+    pass
+    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+    context.set_details('Method not implemented!')
+    raise NotImplementedError('Method not implemented!')
+
+  def AddMsgSendRecord(self, request, context):
     # missing associated documentation comment in .proto file
     pass
     context.set_code(grpc.StatusCode.UNIMPLEMENTED)
@@ -93,6 +105,11 @@ def add_MessageChargeServicer_to_server(servicer, server):
   rpc_method_handlers = {
       'QueryBusinessInfo': grpc.unary_unary_rpc_method_handler(
           servicer.QueryBusinessInfo,
+          request_deserializer=charge__pb2.json.FromString,
+          response_serializer=charge__pb2.json.SerializeToString,
+      ),
+      'AddMsgSendRecord': grpc.unary_unary_rpc_method_handler(
+          servicer.AddMsgSendRecord,
           request_deserializer=charge__pb2.json.FromString,
           response_serializer=charge__pb2.json.SerializeToString,
       ),

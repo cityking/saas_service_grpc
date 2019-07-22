@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'pay_app',
     'message_app',
     'tools'
+    'live_app',
 ]
 
 MIDDLEWARE = [

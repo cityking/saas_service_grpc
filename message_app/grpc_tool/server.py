@@ -17,12 +17,10 @@ from redis_tool import RedisConnector
 
 _ONE_DAY_IN_SECONDS = 60 * 60 * 24
 _HOST = '0.0.0.0'
-_PORT = '8801'
+_PORT = '8803'
 
 import hashlib
-
 cache_conn = RedisConnector().CacheRedis
-
 def str_md5(string):
     md = hashlib.md5()
     md.update(string.encode())
@@ -124,6 +122,16 @@ class MessageCharge(data_pb2_grpc.MessageChargeServicer):
 
         order_list = [order.get_info() for order in orders]
         return dict(status='success', order_list=order_list, count=count)
+
+    @json_response
+    def AddMsgSendRecord(self, request, context):
+        print('start AddMsgSendRecord')
+        data = json.loads(request.text)
+        business_id = data['business_id']
+        business = Business.objects.get(id=business_id)
+        business.msg_num -= 1
+        MsgRecord.objects.create(**data)
+        return dict(status='success')
 
 def serve():
     # 定义服务器并设置最大连接数,corcurrent.futures是一个并发库，类似于线程池的概念

@@ -20,7 +20,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='message_app',
   syntax='proto3',
   serialized_options=None,
-  serialized_pb=_b('\n\x0c\x63harge.proto\x12\x0bmessage_app\"\x14\n\x04json\x12\x0c\n\x04text\x18\x01 \x01(\t2\xad\x02\n\rMessageCharge\x12;\n\x11QueryBusinessInfo\x12\x11.message_app.json\x1a\x11.message_app.json\"\x00\x12\x37\n\rGetChargeInfo\x12\x11.message_app.json\x1a\x11.message_app.json\"\x00\x12\x36\n\x0cUnifiedOrder\x12\x11.message_app.json\x1a\x11.message_app.json\"\x00\x12\x34\n\nCheckOrder\x12\x11.message_app.json\x1a\x11.message_app.json\"\x00\x12\x38\n\x0eQueryOrderList\x12\x11.message_app.json\x1a\x11.message_app.json\"\x00\x62\x06proto3')
+  serialized_pb=_b('\n\x0c\x63harge.proto\x12\x0bmessage_app\"\x14\n\x04json\x12\x0c\n\x04text\x18\x01 \x01(\t2\xe9\x02\n\rMessageCharge\x12;\n\x11QueryBusinessInfo\x12\x11.message_app.json\x1a\x11.message_app.json\"\x00\x12:\n\x10\x41\x64\x64MsgSendRecord\x12\x11.message_app.json\x1a\x11.message_app.json\"\x00\x12\x37\n\rGetChargeInfo\x12\x11.message_app.json\x1a\x11.message_app.json\"\x00\x12\x36\n\x0cUnifiedOrder\x12\x11.message_app.json\x1a\x11.message_app.json\"\x00\x12\x34\n\nCheckOrder\x12\x11.message_app.json\x1a\x11.message_app.json\"\x00\x12\x38\n\x0eQueryOrderList\x12\x11.message_app.json\x1a\x11.message_app.json\"\x00\x62\x06proto3')
 )
 
 
@@ -75,7 +75,7 @@ _MESSAGECHARGE = _descriptor.ServiceDescriptor(
   index=0,
   serialized_options=None,
   serialized_start=52,
-  serialized_end=353,
+  serialized_end=413,
   methods=[
   _descriptor.MethodDescriptor(
     name='QueryBusinessInfo',
@@ -87,9 +87,18 @@ _MESSAGECHARGE = _descriptor.ServiceDescriptor(
     serialized_options=None,
   ),
   _descriptor.MethodDescriptor(
+    name='AddMsgSendRecord',
+    full_name='message_app.MessageCharge.AddMsgSendRecord',
+    index=1,
+    containing_service=None,
+    input_type=_JSON,
+    output_type=_JSON,
+    serialized_options=None,
+  ),
+  _descriptor.MethodDescriptor(
     name='GetChargeInfo',
     full_name='message_app.MessageCharge.GetChargeInfo',
-    index=1,
+    index=2,
     containing_service=None,
     input_type=_JSON,
     output_type=_JSON,
@@ -98,7 +107,7 @@ _MESSAGECHARGE = _descriptor.ServiceDescriptor(
   _descriptor.MethodDescriptor(
     name='UnifiedOrder',
     full_name='message_app.MessageCharge.UnifiedOrder',
-    index=2,
+    index=3,
     containing_service=None,
     input_type=_JSON,
     output_type=_JSON,
@@ -107,7 +116,7 @@ _MESSAGECHARGE = _descriptor.ServiceDescriptor(
   _descriptor.MethodDescriptor(
     name='CheckOrder',
     full_name='message_app.MessageCharge.CheckOrder',
-    index=3,
+    index=4,
     containing_service=None,
     input_type=_JSON,
     output_type=_JSON,
@@ -116,7 +125,7 @@ _MESSAGECHARGE = _descriptor.ServiceDescriptor(
   _descriptor.MethodDescriptor(
     name='QueryOrderList',
     full_name='message_app.MessageCharge.QueryOrderList',
-    index=4,
+    index=5,
     containing_service=None,
     input_type=_JSON,
     output_type=_JSON,
