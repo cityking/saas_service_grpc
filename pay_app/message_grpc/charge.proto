@@ -1,0 +1,143 @@
+syntax = "proto3";
+package message_app;
+
+message json {
+  string text = 1;
+}
+
+//测试地址 192.168.3.217
+//端口 8800
+
+//短信充值
+service MessageCharge {   //定义服务,用在rpc传输中
+
+  rpc QueryBusinessInfo(json) returns (json){}
+  /*获取商户信息
+  参数：business_id 或 business_name
+  参数格式：json
+  参数示例：{"business_id":"1"} {"business_name":"喵哆旺"}
+  返回示例：
+     {
+    	"status": "success",
+    	"business_info": {
+    		"business_id": 1,
+    		"name": "喵哆旺",
+    		"msg_num": 10
+    	}
+     }
+  */
+
+  rpc AddMsgSendRecord(json) returns (json){}
+  /*添加短信发送记录
+  请求示例：
+    {
+    	"business_id": 1,
+    	"phone": "18233228976",
+    	"content": "skjjksjkjkk"
+    }   
+  返回示例：
+     {
+    	"status": "success",
+    	"business_info": {
+    		"business_id": 1,
+    		"name": "喵哆旺",
+    		"msg_num": 10
+    	}
+     }
+  */
+
+
+
+  rpc GetChargeInfo(json) returns (json){}
+  /*获取充值套餐及可使用的支付方式
+  参数：business_id
+  参数格式：json
+  参数示例：{"business_id":"1"}
+  返回示例：
+    {
+    	"status": "success",
+    	"pakages": [{
+    		"title": "100元3000条",
+    		"price": 100.0,
+    		"charge_num": 3000
+    	}, {
+    		"title": "200元10000条",
+    		"price": 200.0,
+    		"charge_num": 10000
+    	}, {
+    		"title": "10元200条",
+    		"price": 0.01,
+    		"charge_num": 100
+    	}],
+    	"pay_types": [{
+    		"2": "微信支付"
+    	}, {
+    		"1": "支付宝支付"
+    	}]
+    }
+  */ 
+
+  rpc UnifiedOrder(json) returns (json){}
+  /*下单 返回支付二维码
+  参数：business_id
+    charge_num 充值条数
+    price 价格
+    pay_type 支付方式 1 支付宝， 2 微信
+  参数格式：json
+  参数示例：
+    {
+    	"business_id": 1,
+    	"charge_num": 100,
+    	"price": 0.01,
+    	"pay_type": 2
+    }
+  返回示例：
+    {
+    	"status": "success",
+    	"pay_code": "weixin://wxpay/bizpayurl?pr=v4AzMC5" #支付二维码
+    }
+  */
+
+
+  rpc CheckOrder(json) returns (json){}
+  /*检查订单状态 
+  参数：business_id
+    order_no 订单号 
+  参数格式：json
+  参数示例：
+    {"business_id": 1, "order_no": "15633887877173738"}
+  返回示例：
+    {
+    	"status": "success",
+    	"state": 1 #0 未支付 1 支付成功
+    }
+  */
+
+  rpc QueryOrderList(json) returns (json){}
+  /*查询充值列表 
+  参数：business_id
+  参数格式：json
+  参数示例：
+    {"business_id": 1}
+  返回示例：
+    {
+    	"status": "success",
+    	"order_list": [{
+    		"order_no": "15637748687637582",
+    		"business": "喵哆旺",
+    		"charge_num": 100,
+    		"price": 0.01,
+    		"pay_type": 1
+    	}, {
+    		"order_no": "15633887877173738",
+    		"business": "喵哆旺",
+    		"charge_num": 100,
+    		"price": 0.01,
+    		"pay_type": 2
+    	}]
+    }
+  */
+
+
+}
+
