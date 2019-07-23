@@ -11,11 +11,10 @@ from message_app.grpc_tool import charge_pb2 as data_pb2,charge_pb2_grpc as data
 from message_app.models import Business, MsgRecord, ChargePackage, Order, PayInfo
 from redis_tool import RedisConnector
 
-
 import hashlib
-cache_conn = RedisConnector().CacheRedis 
-def str_md5(string): 
-    md = hashlib.md5() 
+cache_conn = RedisConnector().CacheRedis
+def str_md5(string):
+    md = hashlib.md5()
     md.update(string.encode())
     res = md.hexdigest()
     return res
@@ -88,7 +87,7 @@ class MessageCharge(data_pb2_grpc.MessageChargeServicer):
         print('start QueryBusinessInfo')
         print(request.text)
         data = json.loads(request.text)
-        if 'business_id' in data: 
+        if 'business_id' in data:
             business_id = data['business_id']
             business = Business.objects.filter(id=business_id).first()
         elif 'business_name' in data:
@@ -99,7 +98,7 @@ class MessageCharge(data_pb2_grpc.MessageChargeServicer):
             return dict(status='success', business_info=business.get_info())
         else:
             return dict(status='fail', msg='商户不存在')
-            
+
     @json_response
     def QueryOrderList(self, request, context):
         print('start QueryOrderList')
@@ -115,7 +114,7 @@ class MessageCharge(data_pb2_grpc.MessageChargeServicer):
 
         order_list = [order.get_info() for order in orders]
         return dict(status='success', order_list=order_list, count=count)
- 
+
     @json_response
     def AddMsgSendRecord(self, request, context):
         print('start AddMsgSendRecord')
@@ -123,7 +122,7 @@ class MessageCharge(data_pb2_grpc.MessageChargeServicer):
         business_id = data['business_id']
         business = Business.objects.get(id=business_id)
         business.msg_num -= 1
+        business.save()
         MsgRecord.objects.create(**data)
         return dict(status='success')
- 
 

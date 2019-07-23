@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'pay_app',
     'message_app',
+    #'tools',
     'live_app',
 ]
 
@@ -84,6 +85,7 @@ WSGI_APPLICATION = 'saas_servcie.wsgi.application'
 #    }
 #}
 
+#线下
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
@@ -93,6 +95,17 @@ DATABASES = {
         'PORT': '5432',
     }
 }
+
+#线上测试
+#DATABASES = {
+#    'default': {
+#        'ENGINE': 'django.db.backends.postgresql',
+#        'NAME': 'saas_service_test',
+#        'USER': 'saas_user',
+#        'PASSWORD': 'saas_password**&&^^',
+#        'PORT': '61024',
+#    }
+#}
 
 
 # Password validation
@@ -119,13 +132,13 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Shanghai'
 
 USE_I18N = True
 
 USE_L10N = True
 
-USE_TZ = True
+USE_TZ = False
 
 
 # Static files (CSS, JavaScript, Images)

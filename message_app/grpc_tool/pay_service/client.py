@@ -3,7 +3,7 @@ import json
 from . import pay_pb2, pay_pb2_grpc
 
 _HOST = 'localhost'
-_PORT = '9900'
+_PORT = '8800'
 
 conn = grpc.insecure_channel(_HOST + ':' + _PORT)
 
@@ -77,6 +77,6 @@ def tibetancalendar(year, month):
 
 
 
-if __name__ == '__main__':
-    data = weixinpay('wx551718a402287291', '1234567890123')
-    print(data)
+#if __name__ == '__main__':
+    #data = weixinpay('wx551718a402287291', '1234567890123')
+    #print(data)

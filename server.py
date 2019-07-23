@@ -13,6 +13,8 @@ from grpc_tool import pay_pb2, pay_pb2_grpc
 from message_app.grpc_tool import charge_pb2, charge_pb2_grpc
 from live_app.grpc_tool import live_pb2, live_pb2_grpc
 
+#from tools import tools_pb2, tools_pb2_grpc
+#from tools.handler import ToolsHandler
 from redis_tool import RedisConnector
 from pay_app.models import WeixinPay as WeixinPayM, AliPay as AliPayM
 from message_app.grpc_tool import server as message_server
@@ -21,7 +23,7 @@ from live_app.grpc_tool import server as live_server
 
 _ONE_DAY_IN_SECONDS = 60 * 60 * 24
 _HOST = '0.0.0.0'
-_PORT = '9900'
+_PORT = '8801'
 
 import hashlib
 
@@ -44,7 +46,7 @@ def pre_request_weixin_pay(func):
             data = dict(return_code=return_code,
                     return_msg=return_msg)
             data = json.dumps(data)
-            return pay_pb2.json(text=data) 
+            return pay_pb2.json(text=data)
         pay = WeixinPayM.objects.filter(app_id=app_id).first()
 
 
@@ -57,11 +59,11 @@ def pre_request_weixin_pay(func):
     return wrapper
 def err_rsp(msg=None):
     return_code = 'FAIL'
-    return_msg = msg 
+    return_msg = msg
     data = dict(return_code=return_code,
             return_msg=return_msg)
     data = json.dumps(data)
-    return pay_pb2.json(text=data) 
+    return pay_pb2.json(text=data)
 def pre_request_ali_pay(func):
     """微信支付"""
     def wrapper(view, request, context):
@@ -73,7 +75,7 @@ def pre_request_ali_pay(func):
             data = dict(return_code=return_code,
                     return_msg=return_msg)
             data = json.dumps(data)
-            return pay_pb2.json(text=data) 
+            return pay_pb2.json(text=data)
         pay = AliPayM.objects.filter(app_id=app_id).first()
 
 
@@ -170,9 +172,10 @@ class TibetanCalendar(pay_pb2_grpc.TibetanCalendarServicer):
 
         key = 'TibetanCalendar'
 
-        if cache_conn.hexists(key, l_key):
-            res = cache_conn.hget(key, l_key).decode()
-        else:
+#        if cache_conn.hexists(key, l_key):
+#            res = cache_conn.hget(key, l_key).decode()
+#        else:
+        if True:
             checkValue = str_md5(year+month).upper()
             url = 'http://site.zhibeili.com/index.php?g=app&m=Zangli&a=index'
             data = dict(checkValue=checkValue,
@@ -180,9 +183,9 @@ class TibetanCalendar(pay_pb2_grpc.TibetanCalendarServicer):
             res = requests.post(url, data=data).text
             cache_conn.hset(key, l_key, res)
 
-        end = datetime.datetime.now() 
+        end = datetime.datetime.now()
         print(end-start)
-        
+
         return pay_pb2.json(text=res)  # 返回一个类实例
 
 def serve():
@@ -201,6 +204,8 @@ def serve():
     live_pb2_grpc.add_LiveStreamManagementServicer_to_server(live_server.LiveStreamManagement(), grpcServer)
     live_pb2_grpc.add_PlayBackManagementServicer_to_server(live_server.PlayBackManagement(), grpcServer)
 
+    #短信服务等
+    #tools_pb2_grpc.add_ToolsServerServicer_to_server(ToolsHandler(), grpcServer)
 
     grpcServer.add_insecure_port(_HOST + ':' + _PORT)    # 添加监听端口
     grpcServer.start()    #  启动服务器

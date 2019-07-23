@@ -1,6 +1,6 @@
 import grpc
 import json
-import charge_pb2 as data_pb2, charge_pb2_grpc as data_pb2_grpc
+from . import charge_pb2 as data_pb2, charge_pb2_grpc as data_pb2_grpc
 
 _HOST = 'localhost'
 _PORT = '9900'
@@ -16,8 +16,8 @@ def get_chargeinfo(business_id):
 
     response = client.GetChargeInfo.future(data_pb2.json(text=text))
     response = response.result()
-    data = json.loads(response.text) 
-    return data 
+    data = json.loads(response.text)
+    return data
 
 def unified_order(business_id, charge_num, price, pay_type):
     client = data_pb2_grpc.MessageChargeStub(channel=conn)
@@ -29,8 +29,8 @@ def unified_order(business_id, charge_num, price, pay_type):
 
     response = client.UnifiedOrder.future(data_pb2.json(text=text))
     response = response.result()
-    data = json.loads(response.text) 
-    return data 
+    data = json.loads(response.text)
+    return data
 
 def check_order(business_id, order_no):
     client = data_pb2_grpc.MessageChargeStub(channel=conn)
@@ -41,18 +41,18 @@ def check_order(business_id, order_no):
 
     response = client.CheckOrder.future(data_pb2.json(text=text))
     response = response.result()
-    data = json.loads(response.text) 
-    return data 
+    data = json.loads(response.text)
+    return data
 
 def query_businessinfo(business_id):
-    client = data_pb2_grpc.MessageChargeStub(channel=conn) 
+    client = data_pb2_grpc.MessageChargeStub(channel=conn)
     data = dict(business_id=business_id)
     text = json.dumps(data)
 
     response = client.QueryBusinessInfo.future(data_pb2.json(text=text))
     response = response.result()
-    data = json.loads(response.text) 
-    return data 
+    data = json.loads(response.text)
+    return data
 
 def query_orderlist(business_id):
     client = data_pb2_grpc.MessageChargeStub(channel=conn)
@@ -62,8 +62,8 @@ def query_orderlist(business_id):
 
     response = client.QueryOrderList.future(data_pb2.json(text=text))
     response = response.result()
-    data = json.loads(response.text) 
-    return data 
+    data = json.loads(response.text)
+    return data
 
 def add_send_record(business_id, phone, content):
     client = data_pb2_grpc.MessageChargeStub(channel=conn)
@@ -74,8 +74,8 @@ def add_send_record(business_id, phone, content):
     text = json.dumps(data)
     response = client.AddMsgSendRecord.future(data_pb2.json(text=text))
     response = response.result()
-    data = json.loads(response.text) 
-    return data 
+    data = json.loads(response.text)
+    return data
 
 
 
@@ -87,5 +87,5 @@ if __name__ == '__main__':
 #    data = query_businessinfo(1)
 #    data = query_orderlist(1)
     data = add_send_record(1, '18233228976', 'skjjksjkjkk')
-    
+
     print(data)
