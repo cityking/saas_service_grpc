@@ -1,0 +1,38 @@
+syntax = "proto3";
+option java_package = "io.grpc.examples.helloworld";
+
+//package tools;
+/*
+服务ip和端口 192.168.3.2:8087
+*/
+
+message File {
+	string file_code = 1; // 文件base64编码
+	//string name = 2; // 文件名
+	string app_name = 3; // 应用名称，
+
+}
+
+message Message {
+	string phone = 1; // 电话号码
+	string content = 2; //内容
+//	string app_name = 3; // 应用名
+}
+
+
+message FileResponse {
+	string message = 1; //返回信息
+	int32 status = 2; //返回状态
+
+}
+
+message MessageResponse {
+	int32 status = 1; //返回状态
+	string msg = 2; //返回状态
+}
+
+service ToolsServer {
+	rpc UploadFile (File) returns (FileResponse); // 文件上传
+	rpc SendMessage (Message) returns (MessageResponse); // 文件上传
+
+}
