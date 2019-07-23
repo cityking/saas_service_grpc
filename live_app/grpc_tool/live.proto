@@ -1,0 +1,306 @@
+syntax = "proto3";
+package live_app;
+
+message json {
+  string text = 1;
+}
+
+//测试地址 192.168.3.217
+//端口 8800
+
+//直播管理
+service LiveManagement {   //定义服务,用在rpc传输中
+
+  rpc GetLiveList(json) returns (json){}
+  /*获取直播列表
+  参数：user_id
+  参数格式：json
+  参数示例：
+    {"user_id": 1}
+  返回示例：
+    {
+    	"status": "success",
+    	"live_record_list": [{
+    		"live_record_id": 5,
+    		"user_id": 1,
+    		"title": "我的直播",
+    		"speaker": "cityking",
+    		"image_url": "http://jjjjj",
+    		"details": "hhjjjjdksjjss",
+    		"start_time": "2019-07-20 08:00:00",
+    		"last_time": 120,
+    		"pull_stream_url": "rtmp://pili-publish.realtime-live.iruyue.tv/ruketang/stream_name",
+    		"play_streams": [{
+    				"play_stream_id": 3,
+    				"live_record_id": 5,
+    				"stream_name": "livestream",
+    				"live_type": "hdl",
+    				"stream_url": "http://pili-live-hdl.realtime-live.iruyue.tv/ruketang/livestream.flv",
+    				"state": 1
+    			},
+    			{
+    				"play_stream_id": 2,
+    				"live_record_id": 5,
+    				"stream_name": "livestream",
+    				"live_type": "hls",
+    				"stream_url": "http://pili-live-hls.realtime-live.iruyue.tv/ruketang/livestream.m3u8",
+    				"state": 1
+    			},
+    			{
+    				"play_stream_id": 1,
+    				"live_record_id": 5,
+    				"stream_name": "livestream",
+    				"live_type": "rtmp",
+    				"stream_url": "rtmp://pili-live-rtmp.realtime-live.iruyue.tv/ruketang/livestream",
+    				"state": 1
+    			}
+    		],
+    		"state": 0
+    	}],
+    	"count": 1
+    }
+  */
+
+  rpc AddLive(json) returns (json){}
+  /*添加直播
+  参数：user_id
+        title 标题
+        speaker 主讲人
+        image_url 封面图片地址
+        details 详细介绍
+        stream_id 流id
+        start_time 开始时间 格式 '2019-07-19 16:20:20'
+        last_time 时长(分钟)
+  参数格式：json
+  参数示例：
+    {
+    	"user_id": 1,
+    	"title": "我的直播",
+    	"speaker": "cityking",
+    	"image_url": "http://jjjjj",
+    	"details": "hhjjjjdksjjss",
+    	"start_time": "2019-07-20 08:00:00",
+    	"last_time": 120,
+    	"pull_stream_url":"rtmp://pili-publish.realtime-live.iruyue.tv/ruketang/stream_name", #推流地址
+    	"play_streams": [{
+    		"stream_name": "livestream",
+    		"live_type": "rtmp",
+    		"stream_url": "rtmp://pili-live-rtmp.realtime-live.iruyue.tv/ruketang/livestream",
+    		"state": 1
+    	}, {
+    		"stream_name": "livestream",
+    		"live_type": "hls",
+    		"stream_url": "http://pili-live-hls.realtime-live.iruyue.tv/ruketang/livestream.m3u8",
+    		"state": 1
+    	}, {
+    		"stream_name": "livestream",
+    		"live_type": "hdl",
+    		"stream_url": "http://pili-live-hdl.realtime-live.iruyue.tv/ruketang/livestream.flv",
+    		"state": 1
+    	}]
+    }
+  返回示例：{"status": "success"}
+  */
+
+  rpc UpdateLive(json) returns (json){}
+  /*直播编辑
+  请求参数：
+    {
+    	"user_id": 1,
+    	"live_record_id": 1,
+    	"title": "我的直播",
+    	"speaker": "cityking",
+    	"image_url": "http://jjjjj",
+    	"details": "hhjjjjdksjjss",
+    	"start_time": "2019-07-20 08:00:00",
+        "stream_id":1,
+    	"pull_stream_url":"rtmp://pili-publish.realtime-live.iruyue.tv/ruketang/stream_name", #推流地址
+    	"last_time": 120
+    }
+  返回示例：{"status": "success"}
+
+  */ 
+
+  rpc DeleteLive(json) returns (json){}
+  /*删除直播
+  请求参数：
+    {
+    	"user_id": 1,
+    	"live_record_id": 1
+    }
+  返回示例：{"status": "success"}
+  */
+
+}
+
+service PlayBackManagement {   //定义服务,用在rpc传输中
+
+  rpc GetPlayBackList(json) returns (json){}
+  /*获取回放列表
+  请求参数： {"user_id": 1}
+  返回参数：
+    {
+    	"status": "success",
+    	"live_playback_list": [{
+    		"play_back_id": 1,
+    		"user_id": 1,
+    		"title": "我的直播",
+    		"is_vip": 0,
+    		"media_type": 0,
+    		"speaker": "cityking",
+    		"image_url": "http://jjjjj",
+    		"details": "hhjjjjdksjjss",
+    		"create_time": "2019-07-21 07:50:05",
+    		"last_time": 0,
+    		"state": 0,
+    		"media_url": "http://pili-vod.realtime-live.iruyue.tv/3126834719.m3u8"
+    	}]
+    }
+  */
+
+
+  rpc AddPlayBack(json) returns (json){}
+  /*添加回放
+  请求参数：
+    {
+    	"user_id": 1,
+    	"title": "我的直播",
+    	"speaker": "cityking",
+    	"image_url": "http://jjjjj",
+    	"details": "hhjjjjdksjjss",
+    	"media_type": 0,
+    	"play_back_title": "直播回放(201907180200)",
+    	"media_url": "http://pili-vod.realtime-live.iruyue.tv/3126834719.m3u8"
+    }
+  返回示例：{"status": "success"}
+  */
+
+  rpc UpdatePlayBack(json) returns (json){}
+  /*回放编辑
+  请求参数：
+    {
+        "play_back_id": 1,
+    	"user_id": 1,
+    	"title": "我的直播",
+    	"speaker": "cityking",
+    	"image_url": "http://jjjjj",
+    	"details": "hhjjjjdksjjss",
+    	"media_type": 0,
+    	"play_back_title": "直播回放(201907180200)",
+    	"media_url": "http://pili-vod.realtime-live.iruyue.tv/3126834719.m3u8"
+    }
+  返回示例：{"status": "success"}
+  */ 
+
+  rpc DeletePlayBack(json) returns (json){}
+  /*删除回放
+  请求参数：
+    {
+        "play_back_id": 1,
+    	"user_id": 1
+    }
+  返回示例：{"status": "success"}
+  */
+
+  rpc GetNoAddPlayBack(json) returns (json){}
+  /*获取未添加的回放
+  请求参数：{"user_id": 1}
+  返回参数：
+    {
+    	"status": "success",
+    	"play_backs": [{
+    		"play_back_title": "直播回放(201907180315)",
+    		"media_url": "http://pili-vod.realtime-live.iruyue.tv/3126839240.m3u8"
+    	}, {
+    		"play_back_title": " 直播回放(201907180223)",
+    		"media_url": "http://pili-vod.realtime-live.iruyue.tv/3126836193.m3u8"
+    	}, {
+    		"play_back_title": "直播回放(201907180200)",
+    		"media_url": "http://pili-vod.realtime-live.iruyue.tv/3126834719.m3u8"
+    	}]
+    }
+  */
+
+
+
+
+}
+
+service LiveStreamManagement {   //定义服务,用在rpc传输中
+
+   rpc GetLiveStreams(json) returns (json){}
+  /*获取直播流
+  请求参数：{"user_id": 1}
+  返回参数：
+    {
+    	"status": "success",
+    	"stream_info": {
+    		"stream_id": 1,
+    		"pull_stream_url": "rtmp://pili-publish.realtime-live.iruyue.tv/ruketang/stream_name",
+    		"play_streams": [{
+    				"stream_name": "livestream",
+    				"live_type": "rtmp",
+    				"stream_url": "rtmp://pili-live-rtmp.realtime-live.iruyue.tv/ruketang/livestream",
+    				"state": 1
+    			},
+    			{
+    				"stream_name": "livestream",
+    				"live_type": "hls",
+    				"stream_url": "http://pili-live-hls.realtime-live.iruyue.tv/ruketang/livestream.m3u8",
+    				"state": 1
+    			},
+    			{
+    				"stream_name": "livestream",
+    				"live_type": "hdl",
+    				"stream_url": "http://pili-live-hdl.realtime-live.iruyue.tv/ruketang/livestream.flv",
+    				"state": 1
+    			}
+    		]
+    	}
+    }
+  */
+
+
+  rpc AddLiveStream(json) returns (json){}
+  /*添加直播流
+  请求参数：
+    {
+    	"user_id": 1,
+    	"live_record_id": 5,
+    	"stream_name": "youtube",
+    	"live_type": "video",
+    	"stream_url": "http://jjkkkll"
+    }
+  返回参数：
+  {"status": "success"}
+  */
+
+
+  rpc UpdateLiveStream(json) returns (json){}
+  /*编辑直播流
+  请求参数：
+    {
+    	"user_id": 1,
+    	"play_stream_id": 4,
+    	"live_record_id": 5,
+    	"stream_name": "youtube",
+    	"live_type": "mp4",
+    	"stream_url": "http://jjkkkll"
+    }
+  返回参数：
+  {"status": "success"}
+  */
+
+  rpc DeleteLiveStream(json) returns (json){}
+  /*删除直播流
+  请求参数：
+    {
+    	"user_id": 1,
+    	"play_stream_id": 4
+    }
+  返回参数：
+  {"status": "success"}
+  */ 
+
+}
+

@@ -1,0 +1,70 @@
+syntax = "proto3";
+package com.zhibeifw.proto;
+option optimize_for = SPEED;
+option java_generic_services = false;
+
+message ProtoEmpty {}
+
+message ProtoIntReq {
+    int32 i = 1;
+}
+
+message ProtoStrReq {
+    string str = 1;
+}
+
+message ProtoIntListReq {
+    repeated int32 list = 1;
+}
+
+message ProtoStrListReq {
+    repeated string list = 1;
+}
+
+message ProtoGeneralResp {
+    int32 result = 1;
+    string desc = 2;
+}
+
+message ProtoIntResp {
+    int32 result = 1;
+    string desc = 2;
+    int32 i = 3;
+}
+
+message ProtoStrResp {
+    int32 result = 1;
+    string desc = 2;
+    int32 str = 3;
+}
+
+message ProtoStrListResp {
+    int32 result = 1;
+    string desc = 2;
+    repeated string list = 3;
+}
+
+message ProtoIntListResp {
+    int32 result = 1;
+    string desc = 2;
+    repeated int32 list = 3;
+}
+
+message ProtoUpsertResp {
+    int32 result = 1;
+    string desc = 2;
+    int32 id = 3;
+    int64 updateTime = 4;
+}
+
+message ProtoShareToWeixinResp {
+    int32 result = 1;
+    string desc = 2;
+    string url = 3;
+}
+
+message ProtoListReq {
+    int32 offset = 1;
+    int32 limit = 2;
+    bool asc = 3;
+}

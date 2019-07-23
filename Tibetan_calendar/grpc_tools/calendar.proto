@@ -1,0 +1,46 @@
+syntax = "proto3";
+package com.zhibeifw.proto;
+option optimize_for = SPEED;
+option java_generic_services = false;
+
+import public "common.proto";
+
+//日历
+message ProtoCalendar {
+   int32 gregorian = 1; // 公历yyyymmdd
+   int32 chinese = 2; // 农历yyyymmdd
+   int32 tibetan = 3; // 藏历yyyymmdd
+   string holiday = 4; // 节日
+   string shareUrl = 5;
+   string content = 6; 
+   string img = 7;
+   string tibetanYear = 8; 
+   string tibetanMonth = 9; 
+   string tibetanDay = 10; 
+}
+
+message ProtoCalendarReq {
+    int32 year = 2;
+    int32 month = 3;
+}
+
+message ProtoCalendarListResp {
+    int32 result = 1;
+    string desc = 2;
+    repeated ProtoCalendar list = 3;
+}
+
+message ProtoCalendarRangeResp {
+    int32 result = 1;
+    string desc = 2;
+    int32 from = 3;
+    int32 to = 4;
+}
+
+//日历服务
+service CalendarService {
+    rpc list(ProtoCalendarReq) returns(ProtoCalendarListResp){};
+    //获得数据库中日历开始的起始和结束日期
+    rpc getGregorianRange(ProtoEmpty) returns(ProtoCalendarRangeResp){};
+}
+
