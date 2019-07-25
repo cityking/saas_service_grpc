@@ -86,26 +86,26 @@ WSGI_APPLICATION = 'saas_servcie.wsgi.application'
 #}
 
 #线下
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'saas_service_db',
-        'USER': 'cityking',
-        'PASSWORD': 'ct065410',
-        'PORT': '5432',
-    }
-}
-
-#线上测试
 #DATABASES = {
 #    'default': {
 #        'ENGINE': 'django.db.backends.postgresql',
-#        'NAME': 'saas_service_test',
-#        'USER': 'saas_user',
-#        'PASSWORD': 'saas_password**&&^^',
-#        'PORT': '61024',
+#        'NAME': 'saas_service_db',
+#        'USER': 'cityking',
+#        'PASSWORD': 'ct065410',
+#        'PORT': '5432',
 #    }
 #}
+
+#线上测试
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'saas_service_test',
+        'USER': 'saas_user',
+        'PASSWORD': 'saas_password**&&^^',
+        'PORT': '61024',
+    }
+}
 
 
 # Password validation
