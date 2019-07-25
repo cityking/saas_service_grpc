@@ -33,7 +33,10 @@ class TibetanCalendar(tibetan_calendar_pb2_grpc.TibetanCalendarServicer):
         data = json.loads(request.text)
         gregorian = data['gregorian']        
         calendar = TibetanCalendarModel.get_date(gregorian)
-        data = dict(status='success', calendar=calendar)
+        if not calendar:
+            data = dict(status='fail')
+        else:
+            data = dict(status='success', calendar=calendar)
         return data
 
     @json_response
