@@ -54,7 +54,10 @@ class TibetanCalendar(models.Model):
             month = int(gregorian[4:6])
             cls.get_month_data(year, month)
             date = cls.objects.filter(gregorian=gregorian).first()
-        return date.get_info()
+        if date:
+            return date.get_info()
+        else:
+            return None
 
 
         
