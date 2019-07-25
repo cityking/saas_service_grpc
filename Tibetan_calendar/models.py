@@ -70,6 +70,7 @@ class TibetanCalendar(models.Model):
                 chinese=self.chinese,
                 tibetan=self.tibetan,
                 holiday=self.holiday,
+                img=self.img,
                 year=self.year,
                 month=self.month,
                 mark=self.mark,
