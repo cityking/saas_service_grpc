@@ -85,6 +85,13 @@ class LiveStreamManagement(live_pb2_grpc.LiveStreamManagementServicer):
     def GetLiveStreams(self, request, context):
         data = json.loads(request.text)
         user_id = data.pop('user_id') 
+        live_record_id = data.pop('live_record_id', None) 
+        if live_record_id:
+            play_streams = PlayStream.objects.filter(user_id=user_id,
+                    live_record_id=live_record_id)
+            play_stream_list = [play_stream.get_info() for play_stream in play_streams]
+            data = dict(status='success', play_stream_list=play_stream_list)
+            return data
         stream = LiveStream.objects.filter(user_id=user_id).first()
         if stream:
             stream_info = stream.get_info()
@@ -178,23 +185,23 @@ class PlayBackManagement(live_pb2_grpc.PlayBackManagementServicer):
     @json_response
     def GetNoAddPlayBack(self, request, context):
         data = json.loads(request.text)
+        print(data)
         user_id = data['user_id']
-        streams = LiveStream.objects.filter(user_id=user_id)
+        stream = LiveStream.objects.filter(user_id=user_id).first()
         now_play_backs = LivePlayBack.objects.filter(user_id=user_id, media_type=0)
         live_infos = [now_play_back.live_info for now_play_back in now_play_backs]
 
         play_backs = []
 
-        for stream in streams:
-            content = query_historyactivity(stream.name, 0, 0)
-            items = content['items']
-            for item in items:
-                fname = str(item['start'] + item['end']) + '.m3u8'
-                play_back_url = get_play_back(stream.name, item['start_time'],
-                        item['end_time'], fname=fname)['fname']
-                if item['play_back_title'] not in live_infos:
-                    play_backs.append(dict(play_back_title=item['play_back_title'],
-                        media_url=play_back_url))
+        content = query_historyactivity(stream.name, 0, 0)
+        items = content['items']
+        for item in items:
+            fname = str(item['start'] + item['end']) + '.m3u8'
+            play_back_url = get_play_back(stream.name, item['start_time'],
+                    item['end_time'], fname=fname)['fname']
+            if item['play_back_title'] not in live_infos:
+                play_backs.append(dict(play_back_title=item['play_back_title'],
+                    media_url=play_back_url))
 
         data = dict(status='success', play_backs=play_backs)
         return data

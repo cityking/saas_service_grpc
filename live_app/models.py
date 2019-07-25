@@ -1,6 +1,7 @@
 from django.db import models
 from live_app.qiniu_tool import get_play_urls, pull_stream_url
 import time
+import datetime
 
 # Create your models here.
 class LiveUser(models.Model):
@@ -91,7 +92,21 @@ class LiveRecord(models.Model):
         play_streams = PlayStream.objects.filter(live_record=self)
         return [play_stream.get_info() for play_stream in play_streams]
 
+    def set_state(self):
+        now = datetime.datetime.now()
+        end = self.start_time + datetime.timedelta(minutes=self.last_time)
+        if now < self.start_time:
+            self.state = 0
+        elif now > end:
+            self.state = 2
+        else:
+            self.state = 1
+        self.save()
+
+            
+
     def get_info(self):
+        self.set_state()
         return dict(live_record_id=self.id,
                 user_id=self.user_id,
                 title=self.title,
@@ -147,7 +162,7 @@ class LivePlayBack(models.Model):
     details = models.TextField('详细介绍', null=True)
     create_time = models.DateTimeField('添加时间', auto_now_add=True)
     last_time = models.IntegerField('时长', default=0)
-    state = models.IntegerField('直播状态', default=0) #0 未开播，1 正在直播 2 直播完成
+    state = models.IntegerField('直播状态', default=2) #0 未开播，1 正在直播 2 直播完成
     media_type = models.IntegerField('视频类型', default=0) #0 回放 1 手动上传
     media_url = models.CharField(max_length=100, null=True,
             verbose_name='视频地址')

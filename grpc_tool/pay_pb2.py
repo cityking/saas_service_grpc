@@ -20,7 +20,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='weixin',
   syntax='proto3',
   serialized_options=None,
-  serialized_pb=_b('\n\tpay.proto\x12\x06weixin\"\x14\n\x04json\x12\x0c\n\x04text\x18\x01 \x01(\t2\x90\x02\n\tWeixinPay\x12*\n\nOrderQuery\x12\x0c.weixin.json\x1a\x0c.weixin.json\"\x00\x12,\n\x0cUnifiedOrder\x12\x0c.weixin.json\x1a\x0c.weixin.json\"\x00\x12*\n\nCloseOrder\x12\x0c.weixin.json\x1a\x0c.weixin.json\"\x00\x12&\n\x06Refund\x12\x0c.weixin.json\x1a\x0c.weixin.json\"\x00\x12+\n\x0bRefundQuery\x12\x0c.weixin.json\x1a\x0c.weixin.json\"\x00\x12(\n\x08Micropay\x12\x0c.weixin.json\x1a\x0c.weixin.json\"\x00\x32\xd8\x01\n\x06\x41liPay\x12\'\n\x07\x46\x61\x63\x65Pay\x12\x0c.weixin.json\x1a\x0c.weixin.json\"\x00\x12)\n\tPrecreate\x12\x0c.weixin.json\x1a\x0c.weixin.json\"\x00\x12&\n\x06\x41ppPay\x12\x0c.weixin.json\x1a\x0c.weixin.json\"\x00\x12*\n\nOrderQuery\x12\x0c.weixin.json\x1a\x0c.weixin.json\"\x00\x12&\n\x06Refund\x12\x0c.weixin.json\x1a\x0c.weixin.json\"\x00\x32@\n\x0fTibetanCalendar\x12-\n\rQueryCalendar\x12\x0c.weixin.json\x1a\x0c.weixin.json\"\x00\x62\x06proto3')
+  serialized_pb=_b('\n\tpay.proto\x12\x06weixin\"\x14\n\x04json\x12\x0c\n\x04text\x18\x01 \x01(\t2\x90\x02\n\tWeixinPay\x12*\n\nOrderQuery\x12\x0c.weixin.json\x1a\x0c.weixin.json\"\x00\x12,\n\x0cUnifiedOrder\x12\x0c.weixin.json\x1a\x0c.weixin.json\"\x00\x12*\n\nCloseOrder\x12\x0c.weixin.json\x1a\x0c.weixin.json\"\x00\x12&\n\x06Refund\x12\x0c.weixin.json\x1a\x0c.weixin.json\"\x00\x12+\n\x0bRefundQuery\x12\x0c.weixin.json\x1a\x0c.weixin.json\"\x00\x12(\n\x08Micropay\x12\x0c.weixin.json\x1a\x0c.weixin.json\"\x00\x32\xd8\x01\n\x06\x41liPay\x12\'\n\x07\x46\x61\x63\x65Pay\x12\x0c.weixin.json\x1a\x0c.weixin.json\"\x00\x12)\n\tPrecreate\x12\x0c.weixin.json\x1a\x0c.weixin.json\"\x00\x12&\n\x06\x41ppPay\x12\x0c.weixin.json\x1a\x0c.weixin.json\"\x00\x12*\n\nOrderQuery\x12\x0c.weixin.json\x1a\x0c.weixin.json\"\x00\x12&\n\x06Refund\x12\x0c.weixin.json\x1a\x0c.weixin.json\"\x00\x62\x06proto3')
 )
 
 
@@ -195,29 +195,5 @@ _ALIPAY = _descriptor.ServiceDescriptor(
 _sym_db.RegisterServiceDescriptor(_ALIPAY)
 
 DESCRIPTOR.services_by_name['AliPay'] = _ALIPAY
-
-
-_TIBETANCALENDAR = _descriptor.ServiceDescriptor(
-  name='TibetanCalendar',
-  full_name='weixin.TibetanCalendar',
-  file=DESCRIPTOR,
-  index=2,
-  serialized_options=None,
-  serialized_start=537,
-  serialized_end=601,
-  methods=[
-  _descriptor.MethodDescriptor(
-    name='QueryCalendar',
-    full_name='weixin.TibetanCalendar.QueryCalendar',
-    index=0,
-    containing_service=None,
-    input_type=_JSON,
-    output_type=_JSON,
-    serialized_options=None,
-  ),
-])
-_sym_db.RegisterServiceDescriptor(_TIBETANCALENDAR)
-
-DESCRIPTOR.services_by_name['TibetanCalendar'] = _TIBETANCALENDAR
 
 # @@protoc_insertion_point(module_scope)

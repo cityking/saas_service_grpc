@@ -37,9 +37,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'Tibetan_calendar',
     'pay_app',
     'message_app',
-    #'tools',
+    'tools',
     'live_app',
 ]
 
