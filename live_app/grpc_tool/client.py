@@ -95,8 +95,11 @@ def add_stream():
     data = json.loads(response.text) 
     return data 
 
-def get_streams(user_id):
-    data = dict(user_id=user_id)
+def get_streams(user_id, live_record_id=None):
+    if live_record_id:
+        data = dict(user_id=user_id, live_record_id=live_record_id)
+    else:
+        data = dict(user_id=user_id)
     print(data)
     client = live_pb2_grpc.LiveStreamManagementStub(channel=conn)
     text = json.dumps(data)

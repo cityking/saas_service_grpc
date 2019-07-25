@@ -1,0 +1,43 @@
+syntax = "proto3";
+package tibetan_calendar;
+
+message json {
+  string text = 1;
+}
+
+service TibetanCalendar{
+    //查询日历
+    rpc QueryCalendar(json) returns (json){}
+    /*
+    请求参数：{"gregorian": "20190711"}
+    返回参数：
+        {
+        	"status": "success",
+        	"calendar": {
+        		"gregorian": "20190711",
+        		"chinese": "20190609",
+        		"tibetan": "20190510",
+        		"holiday": "莲师诞辰，莲师荟供日、千劫佛节日，飞幡日（不适宜悬挂经幡）",
+        		"year": 2019,
+        		"month": 7,
+        		"mark": null,
+        		"week_day": "四"
+        	}
+        }
+    */
+
+    //更新日历
+    rpc UpdateDay(json) returns (json){}
+    /*
+    请求参数：
+    {
+    	"gregorian": "20190707", #公历
+    	"img": "http://fojiao2-10042480.costj.myqcloud.com/data/loacl/zangli/zl149.jpg",
+    	"holiday": "空行母荟供日，供养龙王日，烟、火供吉祥日",
+    	"mark": "添加节日" #备注
+    }
+    返回参数：
+    {"status": "success"}
+    */
+    
+}

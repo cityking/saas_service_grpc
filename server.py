@@ -12,6 +12,7 @@ django.setup()
 from grpc_tool import pay_pb2, pay_pb2_grpc
 from message_app.grpc_tool import charge_pb2, charge_pb2_grpc
 from live_app.grpc_tool import live_pb2, live_pb2_grpc
+from Tibetan_calendar.grpc_tools import tibetan_calendar_pb2, tibetan_calendar_pb2_grpc
 
 #from tools import tools_pb2, tools_pb2_grpc
 #from tools.handler import ToolsHandler
@@ -19,6 +20,7 @@ from redis_tool import RedisConnector
 from pay_app.models import WeixinPay as WeixinPayM, AliPay as AliPayM
 from message_app.grpc_tool import server as message_server
 from live_app.grpc_tool import server as live_server
+from Tibetan_calendar.grpc_tools import server as tibetan_calendar_server
 
 
 _ONE_DAY_IN_SECONDS = 60 * 60 * 24
@@ -158,36 +160,36 @@ class AliPay(pay_pb2_grpc.AliPayServicer):
 
 
 
-class TibetanCalendar(pay_pb2_grpc.TibetanCalendarServicer):
-    def QueryCalendar(self, request, context):
-        start = datetime.datetime.now()
-        data = json.loads(request.text)
-        year = data['year']
-        month = data['month']
-
-        if month.startswith('0'):
-            l_key = year + month[-1]
-        else:
-            l_key = year + month
-
-        key = 'TibetanCalendar'
-
-#        if cache_conn.hexists(key, l_key):
-#            res = cache_conn.hget(key, l_key).decode()
+#class TibetanCalendar(pay_pb2_grpc.TibetanCalendarServicer):
+#    def QueryCalendar(self, request, context):
+#        start = datetime.datetime.now()
+#        data = json.loads(request.text)
+#        year = data['year']
+#        month = data['month']
+#
+#        if month.startswith('0'):
+#            l_key = year + month[-1]
 #        else:
-        if True:
-            checkValue = str_md5(year+month).upper()
-            url = 'http://site.zhibeili.com/index.php?g=app&m=Zangli&a=index'
-            data = dict(checkValue=checkValue,
-                data=request.text)
-            res = requests.post(url, data=data).text
-            cache_conn.hset(key, l_key, res)
-
-        end = datetime.datetime.now()
-        print(end-start)
-
-        return pay_pb2.json(text=res)  # 返回一个类实例
-
+#            l_key = year + month
+#
+#        key = 'TibetanCalendar'
+#
+##        if cache_conn.hexists(key, l_key):
+##            res = cache_conn.hget(key, l_key).decode()
+##        else:
+#        if True:
+#            checkValue = str_md5(year+month).upper()
+#            url = 'http://site.zhibeili.com/index.php?g=app&m=Zangli&a=index'
+#            data = dict(checkValue=checkValue,
+#                data=request.text)
+#            res = requests.post(url, data=data).text
+#            cache_conn.hset(key, l_key, res)
+#
+#        end = datetime.datetime.now()
+#        print(end-start)
+#
+#        return pay_pb2.json(text=res)  # 返回一个类实例
+#
 def serve():
     # 定义服务器并设置最大连接数,corcurrent.futures是一个并发库，类似于线程池的概念
     grpcServer = grpc.server(futures.ThreadPoolExecutor(max_workers=4))   # 创建一个服务器
@@ -195,7 +197,7 @@ def serve():
     # 在服务器中添加派生的接口服务（自己实现了处理函数）
     pay_pb2_grpc.add_WeixinPayServicer_to_server(WeixinPay(), grpcServer)
     pay_pb2_grpc.add_AliPayServicer_to_server(AliPay(), grpcServer)
-    pay_pb2_grpc.add_TibetanCalendarServicer_to_server(TibetanCalendar(), grpcServer)
+    #pay_pb2_grpc.add_TibetanCalendarServicer_to_server(TibetanCalendar(), grpcServer)
 
     charge_pb2_grpc.add_MessageChargeServicer_to_server(message_server.MessageCharge(),
             grpcServer)
@@ -203,6 +205,8 @@ def serve():
     live_pb2_grpc.add_LiveManagementServicer_to_server(live_server.LiveManagement(), grpcServer)
     live_pb2_grpc.add_LiveStreamManagementServicer_to_server(live_server.LiveStreamManagement(), grpcServer)
     live_pb2_grpc.add_PlayBackManagementServicer_to_server(live_server.PlayBackManagement(), grpcServer)
+
+    tibetan_calendar_pb2_grpc.add_TibetanCalendarServicer_to_server(tibetan_calendar_server.TibetanCalendar(), grpcServer)
 
     #短信服务等
     #tools_pb2_grpc.add_ToolsServerServicer_to_server(ToolsHandler(), grpcServer)
