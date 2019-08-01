@@ -7,7 +7,7 @@ option java_package = "io.grpc.examples.helloworld";
 */
 
 message File {
-	string file_code = 1; // 文件base64编码
+	repeated string file_code = 1; // 文件base64编码
 	//string name = 2; // 文件名
 	string app_name = 3; // 应用名称，
 
@@ -21,7 +21,7 @@ message Message {
 
 
 message FileResponse {
-	string message = 1; //返回信息
+	repeated string message = 1; //返回信息
 	int32 status = 2; //返回状态
 
 }
@@ -33,6 +33,6 @@ message MessageResponse {
 
 service ToolsServer {
 	rpc UploadFile (File) returns (FileResponse); // 文件上传
-	rpc SendMessage (Message) returns (MessageResponse); // 文件上传
+	rpc SendMessage (Message) returns (MessageResponse); // 发送短信
 
 }

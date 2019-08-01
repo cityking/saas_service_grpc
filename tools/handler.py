@@ -25,9 +25,10 @@ class ToolsHandler(tools_pb2_grpc.ToolsServerServicer):
     def UploadFile(self, request, context):
         """文件上传"""
         # import ipdb;ipdb.set_trace()
-        url = b64_upload(request.file_code)
+        files = request.file_code
+        urls = [b64_upload(i) for i in files]
         return tools_pb2.FileResponse(
-            message=url, status=200
+            message=urls, status=200
         )
 
     def SendMessage(self, request, context):
