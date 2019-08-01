@@ -60,6 +60,17 @@ def precreate(app_id, out_trade_no, total_amount, subject):
     data = json.loads(response.text)
     return data
 
+def ali_app_pay(app_id, out_trade_no, total_amount):
+    client = pay_pb2_grpc.AliPayStub(channel=conn)
+    data = dict(app_id=app_id,
+            out_trade_no=out_trade_no,
+            total_amount=total_amount,
+            )
+    text = json.dumps(data)
+    response = client.AppPay.future(pay_pb2.json(text=text))
+    response = response.result()
+    data = json.loads(response.text)
+    return data
 
 
 def tibetancalendar(year, month):
