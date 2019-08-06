@@ -1,13 +1,14 @@
 import grpc
 import json
 from . import live_pb2, live_pb2_grpc
+from . import live_longensi_pb2, live_longensi_pb2_grpc
 from live_app.models import LiveStream
 
-_HOST = 'localhost'
-_PORT = '8800'
+#_HOST = 'localhost'
+#_PORT = '8800'
 
-#_HOST = '120.77.237.231'
-#_PORT = '9274'
+_HOST = '120.77.237.231'
+_PORT = '9274'
 conn = grpc.insecure_channel(_HOST + ':' + _PORT)
 
 def add_live():
@@ -32,8 +33,8 @@ def add_live():
 
     response = client.AddLive.future(live_pb2.json(text=text))
     response = response.result()
-    data = json.loads(response.text) 
-    return data 
+    data = json.loads(response.text)
+    return data
 
 def add_play_back(data):
     print(data)
@@ -42,8 +43,8 @@ def add_play_back(data):
 
     response = client.AddPlayBack.future(live_pb2.json(text=text))
     response = response.result()
-    data = json.loads(response.text) 
-    return data 
+    data = json.loads(response.text)
+    return data
 
 
 def get_live_list(user_id):
@@ -54,8 +55,8 @@ def get_live_list(user_id):
 
     response = client.GetLiveList.future(live_pb2.json(text=text))
     response = response.result()
-    data = json.loads(response.text) 
-    return data 
+    data = json.loads(response.text)
+    return data
 
 def get_no_add_play_back(user_id):
     data = dict(user_id=user_id)
@@ -65,8 +66,8 @@ def get_no_add_play_back(user_id):
 
     response = client.GetNoAddPlayBack.future(live_pb2.json(text=text))
     response = response.result()
-    data = json.loads(response.text) 
-    return data 
+    data = json.loads(response.text)
+    return data
 
 def get_play_back_list(user_id):
     data = dict(user_id=user_id)
@@ -76,8 +77,8 @@ def get_play_back_list(user_id):
 
     response = client.GetPlayBackList.future(live_pb2.json(text=text))
     response = response.result()
-    data = json.loads(response.text) 
-    return data 
+    data = json.loads(response.text)
+    return data
 
 
 def add_stream():
@@ -92,8 +93,8 @@ def add_stream():
 
     response = client.AddLiveStream.future(live_pb2.json(text=text))
     response = response.result()
-    data = json.loads(response.text) 
-    return data 
+    data = json.loads(response.text)
+    return data
 
 def get_streams(user_id, live_record_id=None):
     if live_record_id:
@@ -106,8 +107,8 @@ def get_streams(user_id, live_record_id=None):
 
     response = client.GetLiveStreams.future(live_pb2.json(text=text))
     response = response.result()
-    data = json.loads(response.text) 
-    return data 
+    data = json.loads(response.text)
+    return data
 
 def update_stream():
     data = dict(user_id=1,
@@ -123,8 +124,8 @@ def update_stream():
 
     response = client.UpdateLiveStream.future(live_pb2.json(text=text))
     response = response.result()
-    data = json.loads(response.text) 
-    return data 
+    data = json.loads(response.text)
+    return data
 
 def delete_stream():
     data = dict(user_id=1,
@@ -137,8 +138,33 @@ def delete_stream():
 
     response = client.DeleteLiveStream.future(live_pb2.json(text=text))
     response = response.result()
-    data = json.loads(response.text) 
-    return data 
+    data = json.loads(response.text)
+    return data
+
+def get_latest_live(user_id):
+    client = live_longensi_pb2_grpc.LiveFrontStub(channel=conn)
+
+    response = client.GetLatestLive.future(live_longensi_pb2.LiveReq(user_id=user_id))
+    response = response.result()
+    return response
+
+def get_live_time(user_id):
+    client = live_longensi_pb2_grpc.LiveFrontStub(channel=conn)
+
+    response = client.GetLiveStartTime.future(live_longensi_pb2.LiveReq(user_id=user_id))
+    response = response.result()
+    return response
+
+def get_play_back(user_id, page, page_size):
+    client = live_longensi_pb2_grpc.LiveFrontStub(channel=conn)
+    play_back_req = live_longensi_pb2.PlayBackReq(user_id=user_id,
+            page=page,
+            page_size=page_size)
+    response = client.GetPlayBackList.future(play_back_req)
+    response = response.result()
+    return response
+
+
 
 
 if __name__ == '__main__':
@@ -153,7 +179,7 @@ if __name__ == '__main__':
 
     #data = add_play_back(data)
     #data = add_live(data)
-    data = get_live_list(1)
+    #data = get_live_list(1)
     #data = get_no_add_play_back(1)
     #data = add_stream(1, 'livestream', '本地')
     #data = get_streams(1)
