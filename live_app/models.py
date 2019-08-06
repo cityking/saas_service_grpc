@@ -168,7 +168,7 @@ class LivePlayBack(models.Model):
             verbose_name='视频地址')
     live_info =  models.CharField(max_length=100, null=True,
             verbose_name='直播信息')
-
+    play_count = models.IntegerField('播放次数', default=0) 
 
     def __str__(self):
         return self.title

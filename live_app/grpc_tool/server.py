@@ -214,7 +214,8 @@ class LiveFront(live_longensi_pb2_grpc.LiveFrontServicer):
         live = LiveRecord.objects.filter(user_id=user_id, start_time__gt=now).order_by('start_time').first()
         if live:
             streams = PlayStream.objects.filter(live_record=live)
-            latest_live_rsp = live_longensi_pb2.LatestLiveRsp(title=live.title,
+            latest_live_rsp = live_longensi_pb2.LatestLiveRsp(live_id=live.id,
+                    title=live.title,
                     speaker=live.speaker,
                     image_url=live.image_url,
                     details=live.details,
@@ -223,12 +224,15 @@ class LiveFront(live_longensi_pb2_grpc.LiveFrontServicer):
 
             for stream in streams:
                 play_stream = latest_live_rsp.play_streams.add()
+                play_stream.stream_id = stream.id
                 play_stream.stream_name = stream.stream_name
                 play_stream.live_type = stream.live_type
                 play_stream.stream_url = stream.stream_url
+            latest_live_rsp.status = 200
             return latest_live_rsp
         else:
-            return live_longensi_pb2.LatestLiveRsp()
+            return live_longensi_pb2.LatestLiveRsp(status=400,
+                    msg='没有直播信息')
 
     def GetLiveStartTime(self, request, context):
         user_id = request.user_id
@@ -236,10 +240,10 @@ class LiveFront(live_longensi_pb2_grpc.LiveFrontServicer):
         live = LiveRecord.objects.filter(user_id=user_id, start_time__gt=now).order_by('start_time').first()
         if live:
             time_rsp = live_longensi_pb2.LiveStartTimeRsp(time=live.start_time.strftime('%Y-%m-%d %H:%M:%S'))
-
+            time_rsp.status = 200
             return time_rsp
         else:
-            return live_longensi_pb2.LiveStartTimeRsp()
+            return live_longensi_pb2.LiveStartTimeRsp(status=400,msg='没有直播信息')
 
     def GetPlayBackList(self, request, context):
         user_id = request.user_id
@@ -252,6 +256,7 @@ class LiveFront(live_longensi_pb2_grpc.LiveFrontServicer):
         play_back_rsp = live_longensi_pb2.PlayBackRsp(count=count)
         for play_back in play_backs:
             play_info = play_back_rsp.play_back_list.add()
+            play_info.play_back_id = play_info.id
             play_info.title = play_back.title
             play_info.speaker = play_back.speaker
             play_info.image_url = play_back.image_url
@@ -260,8 +265,48 @@ class LiveFront(live_longensi_pb2_grpc.LiveFrontServicer):
             play_info.last_time = play_back.last_time
             play_info.is_vip = play_back.is_vip
             play_info.media_url = play_back.media_url
+            play_info.play_count = play_back.play_count
+        play_back_rsp.status = 200
 
         return play_back_rsp
+
+    def AddPlayRecord(self, request, context):
+        user_id = request.user_id
+        play_back_id = request.play_back_id
+        play_back = LivePlayBack.objects.filter(user_id=user_id,
+                id=play_back_id).first()
+        if play_back:
+            play_back.play_count += 1
+            play_back.save()
+            rsp = live_longensi_pb2.CommonRsp(status=200, msg='添加成功')
+            return rsp 
+        else:
+            return live_longensi_pb2.CommonRsp(status=400, msg='视频不存在') 
+
+
+    def GetSinglePlayBack(self, request, context):
+        user_id = request.user_id
+        play_back_id = request.play_back_id
+        play_back = LivePlayBack.objects.filter(user_id=user_id,
+                id=play_back_id).first()
+        if play_back:
+            play_info = live_longensi_pb2.SinglePlayBackRsp() 
+            play_info.play_back.play_back_id = play_info.id
+            play_info.play_back.title = play_back.title
+            play_info.play_back.speaker = play_back.speaker
+            play_info.play_back.image_url = play_back.image_url
+            play_info.play_back.details = play_back.details
+            play_info.play_back.create_time = play_back.create_time.strftime('%Y-%m-%d %H:%M:%S')
+            play_info.play_back.last_time = play_back.last_time
+            play_info.play_back.is_vip = play_back.is_vip
+            play_info.play_back.media_url = play_back.media_url
+            play_info.play_back.play_count = play_back.play_count
+            play_info.status = 200
+
+            return play_info 
+        else:
+            return live_longensi_pb2.SinglePlayBackRsp(status=400,
+                    msg='视频不存在')
 
 
 

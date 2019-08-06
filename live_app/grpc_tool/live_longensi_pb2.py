@@ -20,7 +20,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='live_app',
   syntax='proto3',
   serialized_options=None,
-  serialized_pb=_b('\n\x13live_longensi.proto\x12\x08live_app\"\x1a\n\x07LiveReq\x12\x0f\n\x07user_id\x18\x01 \x01(\t\"H\n\nPlayStream\x12\x13\n\x0bstream_name\x18\x01 \x01(\t\x12\x11\n\tlive_type\x18\x02 \x01(\t\x12\x12\n\nstream_url\x18\x03 \x01(\t\" \n\x10LiveStartTimeRsp\x12\x0c\n\x04time\x18\x01 \x01(\t\"\xa2\x01\n\rLatestLiveRsp\x12\r\n\x05title\x18\x01 \x01(\t\x12\x0f\n\x07speaker\x18\x02 \x01(\t\x12\x11\n\timage_url\x18\x03 \x01(\t\x12\x0f\n\x07\x64\x65tails\x18\x04 \x01(\t\x12\x12\n\nstart_time\x18\x05 \x01(\t\x12\r\n\x05state\x18\x06 \x01(\x05\x12*\n\x0cplay_streams\x18\x07 \x03(\x0b\x32\x14.live_app.PlayStream\"\x99\x01\n\x08PlayBack\x12\r\n\x05title\x18\x01 \x01(\t\x12\x0f\n\x07speaker\x18\x02 \x01(\t\x12\x11\n\timage_url\x18\x03 \x01(\t\x12\x0f\n\x07\x64\x65tails\x18\x04 \x01(\t\x12\x13\n\x0b\x63reate_time\x18\x05 \x01(\t\x12\x11\n\tlast_time\x18\x06 \x01(\x05\x12\x0e\n\x06is_vip\x18\x07 \x01(\x05\x12\x11\n\tmedia_url\x18\x08 \x01(\t\"?\n\x0bPlayBackReq\x12\x0f\n\x07user_id\x18\x01 \x01(\t\x12\x0c\n\x04page\x18\x02 \x01(\x05\x12\x11\n\tpage_size\x18\x03 \x01(\x05\"H\n\x0bPlayBackRsp\x12\r\n\x05\x63ount\x18\x01 \x01(\x05\x12*\n\x0eplay_back_list\x18\x02 \x03(\x0b\x32\x12.live_app.PlayBack2\xd2\x01\n\tLiveFront\x12=\n\rGetLatestLive\x12\x11.live_app.LiveReq\x1a\x17.live_app.LatestLiveRsp\"\x00\x12\x43\n\x10GetLiveStartTime\x12\x11.live_app.LiveReq\x1a\x1a.live_app.LiveStartTimeRsp\"\x00\x12\x41\n\x0fGetPlayBackList\x12\x15.live_app.PlayBackReq\x1a\x15.live_app.PlayBackRsp\"\x00\x62\x06proto3')
+  serialized_pb=_b('\n\x13live_longensi.proto\x12\x08live_app\"\x1a\n\x07LiveReq\x12\x0f\n\x07user_id\x18\x01 \x01(\t\"[\n\nPlayStream\x12\x11\n\tstream_id\x18\x04 \x01(\t\x12\x13\n\x0bstream_name\x18\x01 \x01(\t\x12\x11\n\tlive_type\x18\x02 \x01(\t\x12\x12\n\nstream_url\x18\x03 \x01(\t\"=\n\x10LiveStartTimeRsp\x12\x0c\n\x04time\x18\x01 \x01(\t\x12\x0e\n\x06status\x18\x02 \x01(\x05\x12\x0b\n\x03msg\x18\x03 \x01(\t\"\xd0\x01\n\rLatestLiveRsp\x12\x0f\n\x07live_id\x18\n \x01(\t\x12\r\n\x05title\x18\x01 \x01(\t\x12\x0f\n\x07speaker\x18\x02 \x01(\t\x12\x11\n\timage_url\x18\x03 \x01(\t\x12\x0f\n\x07\x64\x65tails\x18\x04 \x01(\t\x12\x12\n\nstart_time\x18\x05 \x01(\t\x12\r\n\x05state\x18\x06 \x01(\x05\x12*\n\x0cplay_streams\x18\x07 \x03(\x0b\x32\x14.live_app.PlayStream\x12\x0e\n\x06status\x18\x08 \x01(\x05\x12\x0b\n\x03msg\x18\t \x01(\t\"\xc3\x01\n\x08PlayBack\x12\x14\n\x0cplay_back_id\x18\n \x01(\t\x12\r\n\x05title\x18\x01 \x01(\t\x12\x0f\n\x07speaker\x18\x02 \x01(\t\x12\x11\n\timage_url\x18\x03 \x01(\t\x12\x0f\n\x07\x64\x65tails\x18\x04 \x01(\t\x12\x13\n\x0b\x63reate_time\x18\x05 \x01(\t\x12\x11\n\tlast_time\x18\x06 \x01(\x05\x12\x0e\n\x06is_vip\x18\x07 \x01(\x05\x12\x11\n\tmedia_url\x18\x08 \x01(\t\x12\x12\n\nplay_count\x18\t \x01(\x05\"?\n\x0bPlayBackReq\x12\x0f\n\x07user_id\x18\x01 \x01(\t\x12\x0c\n\x04page\x18\x02 \x01(\x05\x12\x11\n\tpage_size\x18\x03 \x01(\x05\"e\n\x0bPlayBackRsp\x12\r\n\x05\x63ount\x18\x01 \x01(\x05\x12*\n\x0eplay_back_list\x18\x02 \x03(\x0b\x32\x12.live_app.PlayBack\x12\x0e\n\x06status\x18\x03 \x01(\x05\x12\x0b\n\x03msg\x18\x04 \x01(\t\"6\n\rPlayRecordReq\x12\x0f\n\x07user_id\x18\x01 \x01(\t\x12\x14\n\x0cplay_back_id\x18\x02 \x01(\t\"(\n\tCommonRsp\x12\x0e\n\x06status\x18\x01 \x01(\x05\x12\x0b\n\x03msg\x18\x02 \x01(\t\"W\n\x11SinglePlayBackRsp\x12\x0e\n\x06status\x18\x01 \x01(\x05\x12\x0b\n\x03msg\x18\x02 \x01(\t\x12%\n\tplay_back\x18\x03 \x01(\x0b\x32\x12.live_app.PlayBack2\xda\x02\n\tLiveFront\x12=\n\rGetLatestLive\x12\x11.live_app.LiveReq\x1a\x17.live_app.LatestLiveRsp\"\x00\x12\x43\n\x10GetLiveStartTime\x12\x11.live_app.LiveReq\x1a\x1a.live_app.LiveStartTimeRsp\"\x00\x12\x41\n\x0fGetPlayBackList\x12\x15.live_app.PlayBackReq\x1a\x15.live_app.PlayBackRsp\"\x00\x12?\n\rAddPlayRecord\x12\x13.live_app.CommonRsp\x1a\x17.live_app.PlayRecordReq\"\x00\x12\x45\n\x0bGetPlayBack\x12\x1b.live_app.SinglePlayBackRsp\x1a\x17.live_app.PlayRecordReq\"\x00\x62\x06proto3')
 )
 
 
@@ -65,21 +65,28 @@ _PLAYSTREAM = _descriptor.Descriptor(
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='stream_name', full_name='live_app.PlayStream.stream_name', index=0,
+      name='stream_id', full_name='live_app.PlayStream.stream_id', index=0,
+      number=4, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='stream_name', full_name='live_app.PlayStream.stream_name', index=1,
       number=1, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='live_type', full_name='live_app.PlayStream.live_type', index=1,
+      name='live_type', full_name='live_app.PlayStream.live_type', index=2,
       number=2, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='stream_url', full_name='live_app.PlayStream.stream_url', index=2,
+      name='stream_url', full_name='live_app.PlayStream.stream_url', index=3,
       number=3, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
@@ -98,7 +105,7 @@ _PLAYSTREAM = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=61,
-  serialized_end=133,
+  serialized_end=152,
 )
 
 
@@ -116,6 +123,20 @@ _LIVESTARTTIMERSP = _descriptor.Descriptor(
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='status', full_name='live_app.LiveStartTimeRsp.status', index=1,
+      number=2, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='msg', full_name='live_app.LiveStartTimeRsp.msg', index=2,
+      number=3, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
@@ -128,8 +149,8 @@ _LIVESTARTTIMERSP = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=135,
-  serialized_end=167,
+  serialized_start=154,
+  serialized_end=215,
 )
 
 
@@ -141,51 +162,72 @@ _LATESTLIVERSP = _descriptor.Descriptor(
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='title', full_name='live_app.LatestLiveRsp.title', index=0,
+      name='live_id', full_name='live_app.LatestLiveRsp.live_id', index=0,
+      number=10, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='title', full_name='live_app.LatestLiveRsp.title', index=1,
       number=1, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='speaker', full_name='live_app.LatestLiveRsp.speaker', index=1,
+      name='speaker', full_name='live_app.LatestLiveRsp.speaker', index=2,
       number=2, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='image_url', full_name='live_app.LatestLiveRsp.image_url', index=2,
+      name='image_url', full_name='live_app.LatestLiveRsp.image_url', index=3,
       number=3, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='details', full_name='live_app.LatestLiveRsp.details', index=3,
+      name='details', full_name='live_app.LatestLiveRsp.details', index=4,
       number=4, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='start_time', full_name='live_app.LatestLiveRsp.start_time', index=4,
+      name='start_time', full_name='live_app.LatestLiveRsp.start_time', index=5,
       number=5, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='state', full_name='live_app.LatestLiveRsp.state', index=5,
+      name='state', full_name='live_app.LatestLiveRsp.state', index=6,
       number=6, type=5, cpp_type=1, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='play_streams', full_name='live_app.LatestLiveRsp.play_streams', index=6,
+      name='play_streams', full_name='live_app.LatestLiveRsp.play_streams', index=7,
       number=7, type=11, cpp_type=10, label=3,
       has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='status', full_name='live_app.LatestLiveRsp.status', index=8,
+      number=8, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='msg', full_name='live_app.LatestLiveRsp.msg', index=9,
+      number=9, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
@@ -201,8 +243,8 @@ _LATESTLIVERSP = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=170,
-  serialized_end=332,
+  serialized_start=218,
+  serialized_end=426,
 )
 
 
@@ -214,58 +256,72 @@ _PLAYBACK = _descriptor.Descriptor(
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='title', full_name='live_app.PlayBack.title', index=0,
+      name='play_back_id', full_name='live_app.PlayBack.play_back_id', index=0,
+      number=10, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='title', full_name='live_app.PlayBack.title', index=1,
       number=1, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='speaker', full_name='live_app.PlayBack.speaker', index=1,
+      name='speaker', full_name='live_app.PlayBack.speaker', index=2,
       number=2, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='image_url', full_name='live_app.PlayBack.image_url', index=2,
+      name='image_url', full_name='live_app.PlayBack.image_url', index=3,
       number=3, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='details', full_name='live_app.PlayBack.details', index=3,
+      name='details', full_name='live_app.PlayBack.details', index=4,
       number=4, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='create_time', full_name='live_app.PlayBack.create_time', index=4,
+      name='create_time', full_name='live_app.PlayBack.create_time', index=5,
       number=5, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='last_time', full_name='live_app.PlayBack.last_time', index=5,
+      name='last_time', full_name='live_app.PlayBack.last_time', index=6,
       number=6, type=5, cpp_type=1, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='is_vip', full_name='live_app.PlayBack.is_vip', index=6,
+      name='is_vip', full_name='live_app.PlayBack.is_vip', index=7,
       number=7, type=5, cpp_type=1, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='media_url', full_name='live_app.PlayBack.media_url', index=7,
+      name='media_url', full_name='live_app.PlayBack.media_url', index=8,
       number=8, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='play_count', full_name='live_app.PlayBack.play_count', index=9,
+      number=9, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
@@ -281,8 +337,8 @@ _PLAYBACK = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=335,
-  serialized_end=488,
+  serialized_start=429,
+  serialized_end=624,
 )
 
 
@@ -326,8 +382,8 @@ _PLAYBACKREQ = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=490,
-  serialized_end=553,
+  serialized_start=626,
+  serialized_end=689,
 )
 
 
@@ -352,6 +408,20 @@ _PLAYBACKRSP = _descriptor.Descriptor(
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='status', full_name='live_app.PlayBackRsp.status', index=2,
+      number=3, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='msg', full_name='live_app.PlayBackRsp.msg', index=3,
+      number=4, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
@@ -364,12 +434,134 @@ _PLAYBACKRSP = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=555,
-  serialized_end=627,
+  serialized_start=691,
+  serialized_end=792,
+)
+
+
+_PLAYRECORDREQ = _descriptor.Descriptor(
+  name='PlayRecordReq',
+  full_name='live_app.PlayRecordReq',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='user_id', full_name='live_app.PlayRecordReq.user_id', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='play_back_id', full_name='live_app.PlayRecordReq.play_back_id', index=1,
+      number=2, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=794,
+  serialized_end=848,
+)
+
+
+_COMMONRSP = _descriptor.Descriptor(
+  name='CommonRsp',
+  full_name='live_app.CommonRsp',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='status', full_name='live_app.CommonRsp.status', index=0,
+      number=1, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='msg', full_name='live_app.CommonRsp.msg', index=1,
+      number=2, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=850,
+  serialized_end=890,
+)
+
+
+_SINGLEPLAYBACKRSP = _descriptor.Descriptor(
+  name='SinglePlayBackRsp',
+  full_name='live_app.SinglePlayBackRsp',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='status', full_name='live_app.SinglePlayBackRsp.status', index=0,
+      number=1, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='msg', full_name='live_app.SinglePlayBackRsp.msg', index=1,
+      number=2, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='play_back', full_name='live_app.SinglePlayBackRsp.play_back', index=2,
+      number=3, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=892,
+  serialized_end=979,
 )
 
 _LATESTLIVERSP.fields_by_name['play_streams'].message_type = _PLAYSTREAM
 _PLAYBACKRSP.fields_by_name['play_back_list'].message_type = _PLAYBACK
+_SINGLEPLAYBACKRSP.fields_by_name['play_back'].message_type = _PLAYBACK
 DESCRIPTOR.message_types_by_name['LiveReq'] = _LIVEREQ
 DESCRIPTOR.message_types_by_name['PlayStream'] = _PLAYSTREAM
 DESCRIPTOR.message_types_by_name['LiveStartTimeRsp'] = _LIVESTARTTIMERSP
@@ -377,6 +569,9 @@ DESCRIPTOR.message_types_by_name['LatestLiveRsp'] = _LATESTLIVERSP
 DESCRIPTOR.message_types_by_name['PlayBack'] = _PLAYBACK
 DESCRIPTOR.message_types_by_name['PlayBackReq'] = _PLAYBACKREQ
 DESCRIPTOR.message_types_by_name['PlayBackRsp'] = _PLAYBACKRSP
+DESCRIPTOR.message_types_by_name['PlayRecordReq'] = _PLAYRECORDREQ
+DESCRIPTOR.message_types_by_name['CommonRsp'] = _COMMONRSP
+DESCRIPTOR.message_types_by_name['SinglePlayBackRsp'] = _SINGLEPLAYBACKRSP
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
 LiveReq = _reflection.GeneratedProtocolMessageType('LiveReq', (_message.Message,), dict(
@@ -428,6 +623,27 @@ PlayBackRsp = _reflection.GeneratedProtocolMessageType('PlayBackRsp', (_message.
   ))
 _sym_db.RegisterMessage(PlayBackRsp)
 
+PlayRecordReq = _reflection.GeneratedProtocolMessageType('PlayRecordReq', (_message.Message,), dict(
+  DESCRIPTOR = _PLAYRECORDREQ,
+  __module__ = 'live_longensi_pb2'
+  # @@protoc_insertion_point(class_scope:live_app.PlayRecordReq)
+  ))
+_sym_db.RegisterMessage(PlayRecordReq)
+
+CommonRsp = _reflection.GeneratedProtocolMessageType('CommonRsp', (_message.Message,), dict(
+  DESCRIPTOR = _COMMONRSP,
+  __module__ = 'live_longensi_pb2'
+  # @@protoc_insertion_point(class_scope:live_app.CommonRsp)
+  ))
+_sym_db.RegisterMessage(CommonRsp)
+
+SinglePlayBackRsp = _reflection.GeneratedProtocolMessageType('SinglePlayBackRsp', (_message.Message,), dict(
+  DESCRIPTOR = _SINGLEPLAYBACKRSP,
+  __module__ = 'live_longensi_pb2'
+  # @@protoc_insertion_point(class_scope:live_app.SinglePlayBackRsp)
+  ))
+_sym_db.RegisterMessage(SinglePlayBackRsp)
+
 
 
 _LIVEFRONT = _descriptor.ServiceDescriptor(
@@ -436,8 +652,8 @@ _LIVEFRONT = _descriptor.ServiceDescriptor(
   file=DESCRIPTOR,
   index=0,
   serialized_options=None,
-  serialized_start=630,
-  serialized_end=840,
+  serialized_start=982,
+  serialized_end=1328,
   methods=[
   _descriptor.MethodDescriptor(
     name='GetLatestLive',
@@ -464,6 +680,24 @@ _LIVEFRONT = _descriptor.ServiceDescriptor(
     containing_service=None,
     input_type=_PLAYBACKREQ,
     output_type=_PLAYBACKRSP,
+    serialized_options=None,
+  ),
+  _descriptor.MethodDescriptor(
+    name='AddPlayRecord',
+    full_name='live_app.LiveFront.AddPlayRecord',
+    index=3,
+    containing_service=None,
+    input_type=_COMMONRSP,
+    output_type=_PLAYRECORDREQ,
+    serialized_options=None,
+  ),
+  _descriptor.MethodDescriptor(
+    name='GetPlayBack',
+    full_name='live_app.LiveFront.GetPlayBack',
+    index=4,
+    containing_service=None,
+    input_type=_SINGLEPLAYBACKRSP,
+    output_type=_PLAYRECORDREQ,
     serialized_options=None,
   ),
 ])
