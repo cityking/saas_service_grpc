@@ -12,6 +12,7 @@ django.setup()
 from grpc_tool import pay_pb2, pay_pb2_grpc
 from message_app.grpc_tool import charge_pb2, charge_pb2_grpc
 from live_app.grpc_tool import live_pb2, live_pb2_grpc
+from live_app.grpc_tool import live_longensi_pb2, live_longensi_pb2_grpc
 from Tibetan_calendar.grpc_tools import tibetan_calendar_pb2, tibetan_calendar_pb2_grpc
 
 #from tools import tools_pb2, tools_pb2_grpc
@@ -184,6 +185,7 @@ def serve():
     live_pb2_grpc.add_LiveManagementServicer_to_server(live_server.LiveManagement(), grpcServer)
     live_pb2_grpc.add_LiveStreamManagementServicer_to_server(live_server.LiveStreamManagement(), grpcServer)
     live_pb2_grpc.add_PlayBackManagementServicer_to_server(live_server.PlayBackManagement(), grpcServer)
+    live_longensi_pb2_grpc.add_LiveFrontServicer_to_server(live_server.LiveFront(), grpcServer)
 
     tibetan_calendar_pb2_grpc.add_TibetanCalendarServicer_to_server(tibetan_calendar_server.TibetanCalendar(), grpcServer)
 

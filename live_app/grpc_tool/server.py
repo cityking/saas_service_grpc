@@ -10,6 +10,7 @@ from concurrent import futures
 
 
 from live_app.grpc_tool import live_pb2, live_pb2_grpc
+from live_app.grpc_tool import live_longensi_pb2, live_longensi_pb2_grpc
 from live_app.models import LiveStream, LiveRecord, LivePlayBack, PlayStream
 from live_app.qiniu_tool import query_stream, create_stream, pull_stream_url,\
     get_play_urls, disable_stream, query_historyactivity, play_back as get_play_back
@@ -84,8 +85,8 @@ class LiveStreamManagement(live_pb2_grpc.LiveStreamManagementServicer):
     @json_response
     def GetLiveStreams(self, request, context):
         data = json.loads(request.text)
-        user_id = data.pop('user_id') 
-        live_record_id = data.pop('live_record_id', None) 
+        user_id = data.pop('user_id')
+        live_record_id = data.pop('live_record_id', None)
         if live_record_id:
             play_streams = PlayStream.objects.filter(user_id=user_id,
                     live_record_id=live_record_id)
@@ -205,5 +206,63 @@ class PlayBackManagement(live_pb2_grpc.PlayBackManagementServicer):
 
         data = dict(status='success', play_backs=play_backs)
         return data
+
+class LiveFront(live_longensi_pb2_grpc.LiveFrontServicer):
+    def GetLatestLive(self, request, context):
+        user_id = request.user_id
+        now = datetime.datetime.now()
+        live = LiveRecord.objects.filter(user_id=user_id, start_time__gt=now).order_by('start_time').first()
+        if live:
+            streams = PlayStream.objects.filter(live_record=live)
+            latest_live_rsp = live_longensi_pb2.LatestLiveRsp(title=live.title,
+                    speaker=live.speaker,
+                    image_url=live.image_url,
+                    details=live.details,
+                    start_time=live.start_time.strftime('%Y-%m-%d %H:%M:%S'),
+                    state=live.state)
+
+            for stream in streams:
+                play_stream = latest_live_rsp.play_streams.add()
+                play_stream.stream_name = stream.stream_name
+                play_stream.live_type = stream.live_type
+                play_stream.stream_url = stream.stream_url
+            return latest_live_rsp
+        else:
+            return live_longensi_pb2.LatestLiveRsp()
+
+    def GetLiveStartTime(self, request, context):
+        user_id = request.user_id
+        now = datetime.datetime.now()
+        live = LiveRecord.objects.filter(user_id=user_id, start_time__gt=now).order_by('start_time').first()
+        if live:
+            time_rsp = live_longensi_pb2.LiveStartTimeRsp(time=live.start_time.strftime('%Y-%m-%d %H:%M:%S'))
+
+            return time_rsp
+        else:
+            return live_longensi_pb2.LiveStartTimeRsp()
+
+    def GetPlayBackList(self, request, context):
+        user_id = request.user_id
+        page = request.page
+        page_size = request.page_size
+        play_backs = LivePlayBack.objects.filter(user_id=user_id).order_by('-create_time')
+        count = play_backs.count()
+        if page and page_size:
+            play_backs = play_backs[(page-1)*page_size:page*page_size]
+        play_back_rsp = live_longensi_pb2.PlayBackRsp(count=count)
+        for play_back in play_backs:
+            play_info = play_back_rsp.play_back_list.add()
+            play_info.title = play_back.title
+            play_info.speaker = play_back.speaker
+            play_info.image_url = play_back.image_url
+            play_info.details = play_back.details
+            play_info.create_time = play_back.create_time.strftime('%Y-%m-%d %H:%M:%S')
+            play_info.last_time = play_back.last_time
+            play_info.is_vip = play_back.is_vip
+            play_info.media_url = play_back.media_url
+
+        return play_back_rsp
+
+
 
 

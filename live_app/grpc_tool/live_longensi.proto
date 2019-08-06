@@ -1,0 +1,63 @@
+syntax = "proto3";
+package live_app;
+
+//地址 120.77.237.231  
+//端口 9274 
+
+
+message LiveReq {
+  string user_id = 1;
+}
+
+message PlayStream {
+   string stream_name = 1; //直播流名称
+   string live_type = 2; // 直播类型
+   string stream_url = 3; // 直播地址
+} 
+
+message LiveStartTimeRsp {
+    string time = 1;
+}
+
+message LatestLiveRsp{
+    string title = 1; //直播标题
+    string speaker = 2; //主讲人
+    string image_url = 3; //封面图片url
+    string details = 4; //详细介绍
+    string start_time = 5; //开始时间
+    int32 state = 6; //直播状态 0 未开播，1 正在直播 2 直播完成
+    repeated PlayStream play_streams = 7; //直播流 
+}
+
+message PlayBack{
+    string title =1; //标题
+    string speaker = 2; //主讲人
+    string image_url = 3; //封面图片url
+    string details = 4; //详细介绍
+    string create_time = 5; //添加时间
+    int32 last_time = 6; //时长 分钟
+    int32 is_vip = 7; //是否仅会员观看 0 不限用户, 1 仅会员观看
+    string media_url = 8; //视频地址
+}
+message PlayBackReq {
+  string user_id = 1;
+  int32 page = 2;
+  int32 page_size = 3;
+}
+message PlayBackRsp{
+    int32 count = 1;
+    repeated PlayBack play_back_list = 2;
+}
+
+//直播
+service LiveFront {
+
+  //获取最近的直播
+  rpc GetLatestLive(LiveReq) returns (LatestLiveRsp){}
+
+  //获取直播开始时间
+  rpc GetLiveStartTime(LiveReq) returns (LiveStartTimeRsp){}
+
+  //获取视频列表
+  rpc GetPlayBackList(PlayBackReq) returns (PlayBackRsp){}
+} 

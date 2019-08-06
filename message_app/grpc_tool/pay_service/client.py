@@ -3,7 +3,7 @@ import json
 from . import pay_pb2, pay_pb2_grpc
 
 _HOST = 'localhost'
-_PORT = '8800'
+_PORT = '8801'
 
 conn = grpc.insecure_channel(_HOST + ':' + _PORT)
 
@@ -15,8 +15,8 @@ def weixin_order_query(app_id, out_trade_no):
 
     response = client.OrderQuery.future(pay_pb2.json(text=text))
     response = response.result()
-    data = json.loads(response.text) 
-    return data 
+    data = json.loads(response.text)
+    return data
 
 def ali_order_query(app_id, out_trade_no):
     client = pay_pb2_grpc.AliPayStub(channel=conn)
@@ -26,8 +26,8 @@ def ali_order_query(app_id, out_trade_no):
 
     response = client.OrderQuery.future(pay_pb2.json(text=text))
     response = response.result()
-    data = json.loads(response.text) 
-    return data 
+    data = json.loads(response.text)
+    return data
 
 
 
@@ -81,9 +81,9 @@ def tibetancalendar(year, month):
 
     response = client.QueryCalendar.future(pay_pb2.json(text=text))
     response = response.result()
-    data = json.loads(response.text) 
+    data = json.loads(response.text)
 
-    return data 
+    return data
 
 
 
