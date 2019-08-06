@@ -6,11 +6,11 @@ package live_app;
 
 
 message LiveReq {
-  string user_id = 1; //固定值取'1'
+  int32 user_id = 1; //固定值取1
 }
 
 message PlayStream {
-   string stream_id = 4;
+   int32 stream_id = 4;
    string stream_name = 1; //直播流名称
    string live_type = 2; // 直播类型
    string stream_url = 3; // 直播地址
@@ -23,7 +23,7 @@ message LiveStartTimeRsp {
 }
 
 message LatestLiveRsp{
-    string live_id = 10;
+    int32 live_id = 10;
     string title = 1; //直播标题
     string speaker = 2; //主讲人
     string image_url = 3; //封面图片url
@@ -36,7 +36,7 @@ message LatestLiveRsp{
 }
 
 message PlayBack{
-    string play_back_id = 10;
+    int32 play_back_id = 10;
     string title =1; //标题
     string speaker = 2; //主讲人
     string image_url = 3; //封面图片url
@@ -48,7 +48,7 @@ message PlayBack{
     int32 play_count = 9; //播放次数
 }
 message PlayBackReq {
-  string user_id = 1; //固定值取'1'
+  int32 user_id = 1; //固定值取1
   int32 page = 2;
   int32 page_size = 3;
 }
@@ -60,8 +60,8 @@ message PlayBackRsp{
 }
 
 message PlayRecordReq {
-  string user_id = 1; //固定值取'1'
-  string play_back_id = 2;
+  int32 user_id = 1; //固定值取1
+  int32 play_back_id = 2;
 }
 message CommonRsp{
   int32 status = 1;
@@ -86,8 +86,8 @@ service LiveFront {
   rpc GetPlayBackList(PlayBackReq) returns (PlayBackRsp){}
 
   //添加播放记录
-  rpc AddPlayRecord(CommonRsp) returns (PlayRecordReq){}
+  rpc AddPlayRecord(PlayRecordReq) returns (CommonRsp){}
 
   //获取单条回放
-  rpc GetPlayBack(SinglePlayBackRsp) returns (PlayRecordReq){}
+  rpc GetSinglePlayBack(PlayRecordReq) returns (SinglePlayBackRsp){}
 } 

@@ -31,13 +31,13 @@ class LiveFrontStub(object):
         )
     self.AddPlayRecord = channel.unary_unary(
         '/live_app.LiveFront/AddPlayRecord',
-        request_serializer=live__longensi__pb2.CommonRsp.SerializeToString,
-        response_deserializer=live__longensi__pb2.PlayRecordReq.FromString,
+        request_serializer=live__longensi__pb2.PlayRecordReq.SerializeToString,
+        response_deserializer=live__longensi__pb2.CommonRsp.FromString,
         )
-    self.GetPlayBack = channel.unary_unary(
-        '/live_app.LiveFront/GetPlayBack',
-        request_serializer=live__longensi__pb2.SinglePlayBackRsp.SerializeToString,
-        response_deserializer=live__longensi__pb2.PlayRecordReq.FromString,
+    self.GetSinglePlayBack = channel.unary_unary(
+        '/live_app.LiveFront/GetSinglePlayBack',
+        request_serializer=live__longensi__pb2.PlayRecordReq.SerializeToString,
+        response_deserializer=live__longensi__pb2.SinglePlayBackRsp.FromString,
         )
 
 
@@ -73,7 +73,7 @@ class LiveFrontServicer(object):
     context.set_details('Method not implemented!')
     raise NotImplementedError('Method not implemented!')
 
-  def GetPlayBack(self, request, context):
+  def GetSinglePlayBack(self, request, context):
     """获取单条回放
     """
     context.set_code(grpc.StatusCode.UNIMPLEMENTED)
@@ -100,13 +100,13 @@ def add_LiveFrontServicer_to_server(servicer, server):
       ),
       'AddPlayRecord': grpc.unary_unary_rpc_method_handler(
           servicer.AddPlayRecord,
-          request_deserializer=live__longensi__pb2.CommonRsp.FromString,
-          response_serializer=live__longensi__pb2.PlayRecordReq.SerializeToString,
+          request_deserializer=live__longensi__pb2.PlayRecordReq.FromString,
+          response_serializer=live__longensi__pb2.CommonRsp.SerializeToString,
       ),
-      'GetPlayBack': grpc.unary_unary_rpc_method_handler(
-          servicer.GetPlayBack,
-          request_deserializer=live__longensi__pb2.SinglePlayBackRsp.FromString,
-          response_serializer=live__longensi__pb2.PlayRecordReq.SerializeToString,
+      'GetSinglePlayBack': grpc.unary_unary_rpc_method_handler(
+          servicer.GetSinglePlayBack,
+          request_deserializer=live__longensi__pb2.PlayRecordReq.FromString,
+          response_serializer=live__longensi__pb2.SinglePlayBackRsp.SerializeToString,
       ),
   }
   generic_handler = grpc.method_handlers_generic_handler(

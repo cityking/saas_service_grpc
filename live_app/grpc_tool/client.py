@@ -164,6 +164,22 @@ def get_play_back(user_id, page, page_size):
     response = response.result()
     return response
 
+def add_play_record(user_id, play_back_id):
+    client = live_longensi_pb2_grpc.LiveFrontStub(channel=conn)
+    play_back_req = live_longensi_pb2.PlayRecordReq(user_id=user_id,
+            play_back_id=play_back_id)
+    response = client.AddPlayRecord.future(play_back_req)
+    response = response.result()
+    return response
+
+def get_single_play_back(user_id, play_back_id):
+    client = live_longensi_pb2_grpc.LiveFrontStub(channel=conn)
+    play_back_req = live_longensi_pb2.PlayRecordReq(user_id=user_id,
+            play_back_id=play_back_id)
+    response = client.GetSinglePlayBack.future(play_back_req)
+    response = response.result()
+    return response
+
 
 
 

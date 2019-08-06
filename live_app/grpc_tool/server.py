@@ -256,7 +256,7 @@ class LiveFront(live_longensi_pb2_grpc.LiveFrontServicer):
         play_back_rsp = live_longensi_pb2.PlayBackRsp(count=count)
         for play_back in play_backs:
             play_info = play_back_rsp.play_back_list.add()
-            play_info.play_back_id = play_info.id
+            play_info.play_back_id = play_back.id
             play_info.title = play_back.title
             play_info.speaker = play_back.speaker
             play_info.image_url = play_back.image_url
@@ -279,9 +279,9 @@ class LiveFront(live_longensi_pb2_grpc.LiveFrontServicer):
             play_back.play_count += 1
             play_back.save()
             rsp = live_longensi_pb2.CommonRsp(status=200, msg='添加成功')
-            return rsp 
+            return rsp
         else:
-            return live_longensi_pb2.CommonRsp(status=400, msg='视频不存在') 
+            return live_longensi_pb2.CommonRsp(status=400, msg='视频不存在')
 
 
     def GetSinglePlayBack(self, request, context):
@@ -290,8 +290,8 @@ class LiveFront(live_longensi_pb2_grpc.LiveFrontServicer):
         play_back = LivePlayBack.objects.filter(user_id=user_id,
                 id=play_back_id).first()
         if play_back:
-            play_info = live_longensi_pb2.SinglePlayBackRsp() 
-            play_info.play_back.play_back_id = play_info.id
+            play_info = live_longensi_pb2.SinglePlayBackRsp()
+            play_info.play_back.play_back_id = play_back.id
             play_info.play_back.title = play_back.title
             play_info.play_back.speaker = play_back.speaker
             play_info.play_back.image_url = play_back.image_url
@@ -303,7 +303,7 @@ class LiveFront(live_longensi_pb2_grpc.LiveFrontServicer):
             play_info.play_back.play_count = play_back.play_count
             play_info.status = 200
 
-            return play_info 
+            return play_info
         else:
             return live_longensi_pb2.SinglePlayBackRsp(status=400,
                     msg='视频不存在')
