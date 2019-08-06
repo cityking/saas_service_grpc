@@ -174,6 +174,16 @@ class WeixinPay(models.Model):
         raw = self._fetch(url, data)
         return raw
 
+    def app_pay(self, data):
+        """
+        统一下单
+        out_trade_no、body、total_fee必填
+        app_id, mchid, nonce_str自动填写
+        """
+        data['trade_type'] = 'APP'
+        raw = self.unified_order(data)
+        print(raw)
+        
     def micropay(self, data):
         """
         提交付款码支付
@@ -262,8 +272,6 @@ class WeixinPay(models.Model):
             raise WeixinPayError("对账单接口中，缺少必填参数bill_date")
 
         return self._fetch(url, data)
-
-
 
     class Meta:
         verbose_name = "微信支付"
