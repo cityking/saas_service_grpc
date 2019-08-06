@@ -80,7 +80,6 @@ def get_play_back_list(user_id):
     data = json.loads(response.text)
     return data
 
-
 def add_stream():
     data = dict(user_id=1,
             live_record_id=5,
@@ -179,9 +178,6 @@ def get_single_play_back(user_id, play_back_id):
     response = client.GetSinglePlayBack.future(play_back_req)
     response = response.result()
     return response
-
-
-
 
 if __name__ == '__main__':
     data = dict(user_id=1,

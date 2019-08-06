@@ -266,6 +266,7 @@ class LiveFront(live_longensi_pb2_grpc.LiveFrontServicer):
             play_info.is_vip = play_back.is_vip
             play_info.media_url = play_back.media_url
             play_info.play_count = play_back.play_count
+            play_info.collected = play_back.collected
         play_back_rsp.status = 200
 
         return play_back_rsp
@@ -301,6 +302,7 @@ class LiveFront(live_longensi_pb2_grpc.LiveFrontServicer):
             play_info.play_back.is_vip = play_back.is_vip
             play_info.play_back.media_url = play_back.media_url
             play_info.play_back.play_count = play_back.play_count
+            play_info.play_back.collected = play_back.collected
             play_info.status = 200
 
             return play_info

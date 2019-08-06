@@ -24,11 +24,11 @@ class LiveStream(models.Model):
             verbose_name='rtmp直播地址')
     hls_stream_url = models.CharField(max_length=100, null=True,
             verbose_name='hls直播地址')
-    
+
     hdl_stream_url = models.CharField(max_length=100, null=True,
             verbose_name='hdl直播地址')
     state = models.IntegerField('直播流状态', default=1) #0 禁播 1 启用
- 
+
 
 
     def __str__(self):
@@ -41,12 +41,12 @@ class LiveStream(models.Model):
 
     def set_stream_url(self):
         stream_urls = get_play_urls(self.name)
-        self.rtmp_stream_url = stream_urls['rtmp_url'] 
-        self.hls_stream_url = stream_urls['hls_url'] 
-        self.hdl_stream_url = stream_urls['hdl_url'] 
+        self.rtmp_stream_url = stream_urls['rtmp_url']
+        self.hls_stream_url = stream_urls['hls_url']
+        self.hdl_stream_url = stream_urls['hdl_url']
         self.pull_stream_url = pull_stream_url(self.name)
         self.save()
-    
+
 
     def get_play_streams(self):
         data = []
@@ -103,14 +103,14 @@ class LiveRecord(models.Model):
             self.state = 1
         self.save()
 
-            
+
 
     def get_info(self):
         self.set_state()
         return dict(live_record_id=self.id,
                 user_id=self.user_id,
                 title=self.title,
-                speaker=self.speaker, 
+                speaker=self.speaker,
                 image_url=self.image_url,
                 details=self.details,
                 start_time=self.start_time.strftime('%Y-%m-%d %H:%M:%S'),
@@ -132,8 +132,8 @@ class PlayStream(models.Model):
             verbose_name='直播类型')
     stream_url = models.CharField(max_length=100, null=True,
             verbose_name='直播地址')
-    state = models.IntegerField('直播流状态', default=0) #0 可编辑  1 不可编辑 
- 
+    state = models.IntegerField('直播流状态', default=0) #0 可编辑  1 不可编辑
+
 
 
     def __str__(self):
@@ -168,7 +168,8 @@ class LivePlayBack(models.Model):
             verbose_name='视频地址')
     live_info =  models.CharField(max_length=100, null=True,
             verbose_name='直播信息')
-    play_count = models.IntegerField('播放次数', default=0) 
+    play_count = models.IntegerField('播放次数', default=0)
+    collected = models.IntegerField('收藏', default=0)  #0 未收藏 1 已收藏
 
     def __str__(self):
         return self.title
@@ -179,7 +180,7 @@ class LivePlayBack(models.Model):
                 title=self.title,
                 is_vip=self.is_vip,
                 media_type=self.media_type,
-                speaker=self.speaker, 
+                speaker=self.speaker,
                 image_url=self.image_url,
                 details=self.details,
                 create_time=self.create_time.strftime('%Y-%m-%d %H:%M:%S'),

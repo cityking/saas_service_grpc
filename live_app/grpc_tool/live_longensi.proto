@@ -46,6 +46,7 @@ message PlayBack{
     int32 is_vip = 7; //是否仅会员观看 0 不限用户, 1 仅会员观看
     string media_url = 8; //视频地址
     int32 play_count = 9; //播放次数
+    int32 collected = 11; //播放次数
 }
 message PlayBackReq {
   int32 user_id = 1; //固定值取1
