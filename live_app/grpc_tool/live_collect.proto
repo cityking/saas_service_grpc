@@ -1,0 +1,31 @@
+syntax = "proto3";
+package live_app;
+import public "live_longensi.proto"
+
+//地址 120.77.237.231  
+//端口 9274 
+
+
+message PlayBackColletReq {
+  int32 user_id = 1; //固定值取1
+  int32 play_back_id = 2;
+  int32 method = 3; //1 添加收藏 2 删除收藏
+}
+
+message PlayBackColletRsp {
+  int32 status = 1;
+  string msg = 2;
+  int32 play_back_id = 3;
+  int32 collected = 4; //0 未收藏 1 已收藏
+}
+
+//直播
+service PlayBackCollect {
+
+  // 收藏添加/删除
+  rpc Collect(PlayBackColletReq) returns (PlayBackColletRsp){}
+
+  // 获取收藏列表
+  rpc GetCollectedList(PlayBackReq) returns (PlayBackRsp){}
+
+} 
