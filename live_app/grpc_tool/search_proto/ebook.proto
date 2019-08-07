@@ -1,0 +1,69 @@
+syntax = "proto3";
+import "google/protobuf/timestamp.proto";
+option java_package = "com.jyzh.jetpet.grpc";
+message BookSheet {
+	int32 id = 1; // ID
+	int32 user_id = 2; // 用户id
+	EBook ebook = 3; // 书籍
+	int32 schedule = 4; // 阅读进度百分比
+}
+// 著作
+message EBook {
+	int32 id = 1; // ID
+	string source = 2; // 地址url
+	string title = 3; // 书籍名称
+	bool vip_user = 4; // 会员开关
+	int32 auther_id = 5; // 关联上师 id
+	string pic = 6; // 封面图
+	string desc = 7; // 书籍介绍
+	google.protobuf.Timestamp create_time = 8; // 创建时间
+	string auther_name = 9; //上师名字
+
+	int32 collections_count = 10; //收藏人数
+	int32 read_count = 11; //阅读人数
+
+	bool is_collection = 12; //是否收藏
+	string share_url = 13; // 分享url
+
+}
+
+// eBookResponse
+message EbooksResponse {
+	repeated Guru gurus = 1; //上师介绍页, 仅第一页有数据
+	repeated EBook ebooks = 2; //著作
+}
+
+//上师
+message Guru {
+	int32 id = 1; // ID
+	string name = 2; // 姓名
+	string avatar = 3; // 肖像图片
+	string banner = 4; // banner图片
+	string desc = 5; // 上师简介
+	google.protobuf.Timestamp create_time = 6; // 创建时间
+
+}
+// 问题
+message Questions {
+	int32 id = 1; // ID
+	string user_no = 2; // 用户账号
+	string nickname = 3; // 用户昵称
+	google.protobuf.Timestamp create_time = 4; // 提问时间
+	string title = 5; // 提问标题
+	string content = 6; // 提问内容
+	Answer answer = 7; // 回答
+	repeated string images = 8; // 图片
+
+	bool is_vipuser = 9; //提问用户是否为vip
+
+}
+// 回答
+message Answer {
+	int32 id = 1; // ID
+	int32 question_id = 2; // 对应问题id
+	google.protobuf.Timestamp create_time = 3; // 回答时间
+	//	Guru guru = 4; // 解答上师
+	string content = 5; // 回答内容
+	string replay_user = 6; // 回答人
+	//	int32 guru_id = 6; // 解答上师id
+}

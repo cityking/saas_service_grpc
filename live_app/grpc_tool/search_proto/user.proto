@@ -1,0 +1,69 @@
+syntax = "proto3";
+option java_package = "com.jyzh.jetpet.grpc";
+import "google/protobuf/timestamp.proto";
+
+// 用户
+message User {
+	//  int32 id = 1; // ID
+	string user_no = 2; // 注册号（用户名 ）
+	string password = 3; // 密码
+	string code = 4; // 验证码
+
+	bool is_vip = 5; //是否为vip 只读字段
+	string nickname = 6; // 昵称
+	string language = 7; // 语言
+	string avatar = 8; // 头像地址
+
+	string mobile = 9; // 手机号
+	string email = 10; // 安全邮箱
+	string code_type = 11; // 验证码类型 （mobile 手机， email 邮箱
+	google.protobuf.Timestamp vip_expire_in = 13; // 会员过期时间
+	bool is_admin = 12; // 是否 为后台账户
+}
+
+// 用户数据
+message UserData {
+	int32 id = 1; //ID
+	string nickname = 2; // 昵称
+	string user_no = 3; // 注册号（用户名 ）
+	string avatar = 4; // 头像地址
+	google.protobuf.Timestamp created_time = 5; // 加入时间
+	google.protobuf.Timestamp last_login = 6; // 上次登录时间
+	bool is_vip = 7; //是否为vip
+	string status = 8; // 状态
+}
+
+// 用户数据操作
+message UserDataOp {
+	int32 id = 1 ;// 用户id
+	bool status = 2; //状态
+	bool enable_vip = 4; // 会员功能
+	string password = 3; // 密码
+}
+
+// 用户地址
+message Address {
+	int32 id = 1; // ID
+	//	int32 user_id = 2; // 关联用户id
+	string username = 3; // 用户名
+	string phone = 4; // 联系手机号
+	string area = 5; // 地区
+	string address = 6; // 详细地址
+	bool is_default = 7; // 是否为默认
+
+}
+
+// 验证码请求
+message CodeRequest {
+	string account = 1; // 手机号，或者邮箱
+	string account_type = 2; // （mobile 手机， email 邮箱）
+	string type = 3; // 验证码种类 ('reset', 重置密码)， ("bind", "绑定账号")
+	string user_no = 4; // 用户名 （找回密码时使用）
+	string code = 5; // 验证码
+}
+
+// 会员权益
+message VipRights {
+	string name = 1; // 权益名
+	string pic = 2; // 图片url
+}

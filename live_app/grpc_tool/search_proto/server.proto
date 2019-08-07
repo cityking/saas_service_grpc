@@ -1,0 +1,163 @@
+syntax = "proto3";
+import public "common.proto";
+import public "article.proto";
+import public "buddha.proto";
+import public "ebook.proto";
+import public "user.proto";
+import public "order.proto";
+option java_package = "com.jyzh.jetpet.grpc";
+option java_outer_classname = "Temple";
+/*
+登录identity 放在metadata （headers）里，参数名称为identity，
+语言也是在metadata 里面，参数名为 language, ("chinese", "中文" )， （"english"， "英文"）
+*/
+
+service TempleServer {
+	// 首页
+	rpc Index (Temp) returns (Response); // 首页接口，返回Index
+
+	// search
+	rpc Search (Page) returns (ListResponse); // 搜索接口 query 中参数为 search
+	rpc GetHotKey (Temp) returns (ListResponse); // 热搜获取
+
+	rpc MetaDataSave (MetaData) returns (Response); // 保存
+	rpc MetaDataDelete (MetaData) returns (Response); //删除
+
+	// 用户
+	rpc Register (User) returns (Response); // 注册, 返回identity 放在 在msg中
+	rpc Login (User) returns (Response); // 注册, 返回identity 放在 在msg中
+	rpc ChangePassword (User) returns (Response); // 修改密码
+	rpc UserInfo (Temp) returns (Response); // 获取用户信息
+	rpc UpdateUser (User) returns (Response); // 修改用户
+	rpc GetCode (CodeRequest) returns (Response); // 获取验证码
+	rpc UserBind (CodeRequest) returns (Response); // 绑定邮箱，或手机号
+
+	rpc GetUsers (Page) returns (ListResponse);// 获取用户数据（admin）
+	rpc ManageUser (UserDataOp) returns (Response); // 用户数据操作 (admin)
+
+	// 收获地址
+	rpc GetAddress (Temp) returns (ListResponse); // 获取收货地址
+	rpc CreateAddress (Address) returns (Response); // 获取收货地址
+	rpc UpdateAddress (Address) returns (Response); // 获取收货地址
+	rpc DeleteAddress (ID) returns (Response); // 获取收货地址
+
+	// 文章
+	rpc GetArticleList (Page) returns (ListResponse); // 获取文章列表
+	rpc GetArticleDetail (ID) returns (Response); // 获取文章详情
+
+	rpc CreateArticle (Article) returns (Response); // 创建开示
+	rpc UpdateArticle (Article) returns (Response); // 修改开示
+	rpc DeleteArticle (ID) returns (Response); // 删除开示
+
+	//  banner
+	// 获取banaer 参数 改为PAGE， 需要传query值， {"location": "index"} 为首页，  {"location": "article"} 为开示页
+	rpc GetBannerList (Page) returns (ListResponse);
+	rpc CreateBanner (Banner) returns (Response); // 创建banner
+	rpc DeleteBanner (ID) returns (Response); // 删除banner
+
+	// 供佛
+	rpc GetBuddha (Temp) returns (ListResponse); // 获取佛像信息
+	rpc CreateBuddha (Buddha) returns (Response); //创建佛像
+	rpc UpdateBuddha (Buddha) returns (Response); //修改佛像
+	rpc DeleteBuddha (ID) returns (Response); //删除佛像
+
+	rpc GetPrayBuddha (Temp) returns (Response); // 获取供佛信息
+	rpc CreateNewPray (PrayBuddhaObject) returns (Response); //添加供佛信息 （id 不用传）
+	rpc PrayBuddha (PrayBuddhaObject) returns (Response); // 供佛 (Buddha 中信息都需要传)
+
+	// 上师（著作）
+	rpc GetGuruList (Page) returns (ListResponse); // 获取上师列表
+	rpc GetGuruDetail (ID) returns (Response); // 获取上师详情
+	rpc CreateGuru (Guru) returns (Response); // 创建上师
+	rpc UpdateGuru (Guru) returns (Response); // 修改上师
+	rpc DeleteGuru (ID) returns (Response); // 删除上师
+
+	// 电子书
+	rpc GetEbookList (Page) returns (ListResponse); // 获取 电子书列表
+	//	rpc AddBookToSheet (ID) returns (Response); // 将电子书添加到书架（开始阅读）
+	rpc GetEBook (ID) returns (Response); // 电子书详情
+	rpc CreateEbook (EBook) returns (Response); // 创建电子书
+	rpc UpdateEbook (EBook) returns (Response); // 创建电子书
+	rpc DeleteEbook (ID) returns (Response); // 创建电子书
+
+	//问答
+	// 获取问题列表 参数query {"location": "all"} 为问答列表（已回答）"my" 为我的问答
+	rpc GetQuestionList (Page) returns (ListResponse);
+	rpc CreateQuestion (Questions) returns (Response); // 提交问题
+	rpc Replay (Answer) returns (Response); // 回答
+
+	rpc GetQuestionDetail (ID) returns (Response);
+	rpc DeleteQuestion (ID) returns (Response);
+
+	//收藏
+	// 获取收藏 query参数 type: ("1", "文章"), ("2", "电子书"), ("3", "视频"), ("4", "法音")
+	// 参数 album_id 表示该专辑下的收藏法音
+	rpc GetCollectionsList (Page) returns (ListResponse);
+	rpc Collection (Collections) returns (Response); // 收藏/取消收藏
+
+	//法音
+	rpc AlbumList (Page) returns (ListResponse); // 法音专辑列表
+	rpc AlbumDetail (ID) returns (Response); //获取专辑中的法音列表
+	rpc CreateAlbum (Album) returns (Response); // 创建专辑
+	rpc UpdateAlbum (Album) returns (Response); // 修改专辑
+	rpc DeleteAlbum (ID) returns (Response); // 删除专辑
+	rpc AddVoiceToAlbum (AlbumVoice) returns (Response); // 法音，专辑的绑定
+
+	rpc GetVoice (Page) returns (ListResponse); // 获取法音列表
+	rpc GetVoiceDetail (ID) returns (Response); // 获取法音详情
+	//	rpc RemoveVoice (Voice) returns (Response); // 法音移除专辑
+	rpc CreateVoice (Voice) returns (Response); // 创建法音
+	rpc UpdateVoice (Voice) returns (Response);
+	rpc DeleteVoice (ID) returns (Response); // 删除法音
+
+	rpc GetMaster (Page) returns (ListResponse); // 获取法师
+	rpc CreateMaster (Master) returns (Response); // 添加法师
+	rpc UpdateMaster (Master) returns (Response);
+	rpc DeleteMaster (ID) returns (Response);
+
+	// 公告管理
+	rpc NoticeList (Page) returns (ListResponse); // 公告列表
+	rpc CreateNotice (Notice) returns (Response); // 创建公告
+	rpc UpdateNotice (Notice) returns (Response); // 创建公告
+	rpc DeleteNotice (ID) returns (Response); // 删除
+
+	// 龙恩寺简介
+	rpc GetDesc (Temp) returns (Response); // 获取龙恩寺简介
+	rpc SaveDesc (Desc) returns (Response); // 保存龙恩寺简介
+
+	rpc GetColleges (Temp) returns (ListResponse); // 获取学院列表
+	rpc GetCollegeDetail (ID) returns (Response); // 获取学院详情
+	rpc CreateCollege (College) returns (Response); // 创建学院
+	rpc UpdateCollege (College) returns (Response); // 更新学院
+	rpc DeleteCollege (ID) returns (Response); // 删除学院
+
+	rpc GetFlash (Temp) returns (ListResponse); // 获取闪屏
+	rpc CreateFlash (Flash) returns (Response); // 创建闪屏
+	rpc UpdateFlash (Flash) returns (Response); // 更新闪屏
+	rpc DeleteFlash (ID) returns (Response); // 删除闪屏
+
+	// 订单（乐捐，成为会员）
+	rpc GetVipGoods (Page) returns (ListResponse); // 获取会员购买价格
+	rpc DonateOnline (DonateReq) returns (Response); // 乐捐线上订单
+	rpc DonateOffline (DonateOfflineReq) returns (Response); // 乐捐线下订单
+	rpc BuyVip (ByVipReq) returns (Response); // 成为会员
+
+	rpc GetPayType (Temp) returns (ListResponse);// 获取支付方式
+	rpc getBankAccount (Temp) returns (ListResponse); //获取汇入账户
+
+	/* 获取订单，参数query
+	type ("1", "线上订单"), ("2", "线下订单"), ("3", "赠礼订单")
+	create_time, 筛选日期
+	username, 账号昵称筛选
+	*/
+	rpc GetDonateOrderList (Page) returns (ListResponse); //（admin）
+	rpc DeleteDonateOrder (ID) returns (Response);// 删除订单（admin）
+	rpc ConfireDonateOrder (ID) returns (Response); // 审核订单（admin）
+	rpc DeliverDonateGoods (ID) returns (Response); //确认发货（admin）
+
+	// 会员设置
+	rpc SaveVipPrice (VipPrice) returns (Response); // 保存会员费用等设置（admin）
+	rpc GetVipPrice (Temp) returns (Response); // 获取（admin）
+
+	rpc GetVipRights (Temp) returns (ListResponse); // 会员特权
+}

@@ -1,0 +1,25 @@
+syntax = "proto3";
+import "google/protobuf/timestamp.proto";
+option java_package = "com.jyzh.jetpet.grpc";
+
+// 佛像
+message Buddha {
+	int32 id = 1; // ID
+	string name = 2; // 佛像名称
+	string pic = 3; // 佛像图片地址
+}
+
+// 供佛
+message PrayBuddhaObject {
+	int32 id = 1; // ID
+	int32 buddha_id = 2; // 佛像编号
+	google.protobuf.Timestamp datetime = 3; // 供请时间
+	bool light = 4; // 供灯
+	bool incense = 5; // 供香
+	bool water = 6; // 供水
+	bool flower = 7; // 供花
+	bool tower = 8; //供塔
+
+	string buddha_pic = 9; // 佛像图片
+}
+

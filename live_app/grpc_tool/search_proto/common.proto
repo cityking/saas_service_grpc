@@ -1,0 +1,83 @@
+syntax = "proto3";
+option java_package = "com.jyzh.jetpet.grpc";
+import "google/protobuf/any.proto";
+import "google/protobuf/timestamp.proto";
+
+
+message Temp {
+}
+
+message ID {
+	int32 id = 1;
+}
+
+message Page {
+	int32 page = 1;
+	int32 page_size = 2;
+	map<string, string> query = 3; // 筛选条件
+}
+
+// 学院相册图片
+
+message Image {
+	int32 width = 1 ;// 宽
+	int32 height = 2 ;// 高
+	string url = 3 ;// 图片url
+
+}
+
+// 学院管理
+message College {
+	int32 id = 1; // ID
+	string name = 2; // 学院名称
+	string desc = 3; // 副标题
+	string pic = 4; // 主图片url
+	repeated string images = 5; // 图片相册 (后台)
+	repeated Image photos = 6 ;// 相册url 详细信息 （app）
+	string detail = 7; //学院详情
+}
+
+// 龙恩寺介绍
+message Desc {
+	int32 id = 1; // ID
+	string title = 2; // 主标题
+	string desc = 3; // 副标题
+	string pic = 4; // 主图片url
+	string video = 5; // 视频url
+	string detail = 6; // 详细介绍
+	repeated College colleges = 7; // 学院
+}
+
+// 闪屏
+message Flash {
+	int32 id = 1; // ID
+	string name = 2; // 名称
+	google.protobuf.Timestamp update_time = 3; // 更新时间
+	string pic = 4; // 主图片url
+	bool is_available = 5; // 是否启用
+}
+
+// ==============Response=============
+
+message Response {
+	//  int32 total = 1; // 总数量
+	int32 status_code = 2; // 返回状态吗
+	string error_msg = 3; // 错误信息
+	google.protobuf.Any body = 4; // 返回对应对象, 可以是任意
+	string msg = 5; // 返回信息
+}
+
+message ListResponse {
+	int32 total = 1; // 总数量
+	int32 status_code = 2; // 返回状态吗
+	string error_msg = 3; // 错误信息
+	repeated google.protobuf.Any body = 4; // 返回对应对, 可以是任意
+}
+
+/*
+* status_code 参考值
+* 200 成功
+* 401 请求失败
+* 404 未找到
+* 403 未登录
+*/

@@ -1,0 +1,83 @@
+syntax = "proto3";
+option java_package = "com.jyzh.jetpet.grpc";
+import "google/protobuf/timestamp.proto";
+
+// 银行
+message BankAccount {
+  int32 id = 1; // ID
+  string name = 2; // 银行名称
+  string num = 3; // 银行账号
+  google.protobuf.Timestamp create_time = 4; // 添加时间
+}
+
+// 设置会员价格
+message VipPrice {
+  bool switch = 1; //会员开关
+  bool use_test = 2; // 使用测试会员
+  double per_month = 3; // 每月价格
+  double three_month = 4; // 季度价格
+  double half_year = 5; // 半年价格
+  double per_year = 6; // 每年价格
+}
+
+
+//Vip 价格
+message VipGoods {
+  int32 id = 1; //ID
+  double price = 2; //价格
+  string name = 3; // 名称
+  int32 period = 4; // 有效期
+  double cutdown = 5; //优惠价格
+  double avg_price = 6; // 平均每月价格
+}
+
+// 乐捐-线上
+message DonateReq {
+  string username = 1; // 捐助人姓名
+  bool with_gift = 2; // 是否接收赠礼
+  int32 address_id = 3; // 收货地址 id
+  double total_fee = 4; // 金额
+  int32 pay_type = 5; // 支付方式
+}
+
+// 乐捐-线下
+message DonateOfflineReq {
+  string username = 1; // 捐助人姓名
+  bool with_gift = 2; // 是否接收赠礼
+  int32 address_id = 3; // 收货地址 id
+  double total_fee = 4; // 金额
+  string bank = 8; // 银行
+  string bank_num = 9; // 汇款账户
+  string proof = 10; // 凭证
+}
+
+// 会员购买
+message ByVipReq {
+  int32 vip_goods_id = 1; //会员商品id
+  int32 pay_type = 2; //  支付方式
+}
+
+// 支付方式
+message PayType {
+  int32 id = 1; //支付方式id
+  string name = 2; // 支付名称
+  string pic = 3; // 支付方式图标
+}
+
+// 乐捐订单
+message Order {
+  int32 id = 1; // ID
+  int32 user = 2; // 用户
+  string username = 3; // 用户名
+  bool with_gift = 4; // 是否接收赠礼
+  int32 address = 5; // 收货地址
+  google.protobuf.Timestamp create_time = 6; // 创建时间
+  int32 status = 7; // 状态 (1, "待支付"|"待审核"), (2, "已支付"), (3, "待发货")
+  string bank = 8; // 银行
+//  string bank_num = 9; // 汇款账户
+  string proof = 10; // 凭证
+
+  double total_fee = 12; // 金额
+  int32 pay_type = 13; // 支付方式 (1, "支付宝"), (2, "微信"), (3, "paypal")
+  string order_num = 14; //订单号
+}

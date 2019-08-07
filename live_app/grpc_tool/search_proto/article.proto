@@ -1,0 +1,128 @@
+syntax = "proto3";
+import "google/protobuf/timestamp.proto";
+import "common.proto";
+option java_package = "com.jyzh.jetpet.grpc";
+
+message Article {
+	int32 id = 1;
+	string title = 2; // 标题
+	string pic = 3; // 封面图
+	string desc = 4; // 副标题
+	string content = 5; // 正文 列表中为空
+	bool is_top = 6; // 是否置顶
+	int32 weight = 7; // 权重
+	bool status = 8; //是否启用状态
+	int32 view_count = 9; // 阅读数
+	google.protobuf.Timestamp create_time = 10; // 创建时间
+
+	bool is_collection = 11; // 用户是否收藏
+	string banner = 12; // 置顶Banner图片
+	bool is_vipuser = 13; // 仅允许会员查看
+	string share_url = 14; // 分享url
+
+}
+
+message Banner {
+	int32 id = 1;
+	string title = 2; //"标题"
+	string pic = 3; //"图片"
+	string url = 4; //"链接url" 开示类型为id
+
+	bool status = 5; // 是否启用
+	string type = 6; // 链接类型 ("article", "开示"), ("out", "外链"), ("article_vip", "需要vip权限的开示")
+	google.protobuf.Timestamp create_time = 10; // 创建时间
+
+}
+
+// 收藏
+message Collections {
+	int32 id = 1; // ID
+	//  int32 user = 2; // 用户
+	bool status = 3; // 是否收藏
+	int32 type = 4; // 类型 (1, "文章"), (2, "电子书"), (3, "视频"), (4, "法音")
+	int32 obj_id = 5; // 对应对象的id
+}
+
+// 法师
+message Master {
+	int32 id = 1; // ID
+	string name = 2; // 法师
+	string avatar = 3; // 肖像图片
+	string desc = 4; // 简介
+	string banners = 5; // banner图片
+	google.protobuf.Timestamp create_time = 10; // 创建时间
+
+}
+
+// 专辑
+message Album {
+	int32 id = 1; // ID
+	string name = 2; // 名称
+	bool vip_user = 3; // 会员开关
+	string pic = 4; // 封面管理
+	string desc = 5; // 内容介绍
+
+	repeated Voice voices = 6; //内容 只读
+	google.protobuf.Timestamp create_time = 10; // 创建时间
+
+}
+
+// 上师发音
+message Voice {
+	int32 id = 1; // ID
+	string url = 2; // 链接地址
+	string title = 3; // 标题
+	//	string pic = 4; // 封面图
+
+	Master master = 5; //关联法师
+	int32 album_id = 6; //关联专辑
+	bool is_vipuser = 7; // 会员权限(是否仅会员收听)
+	Album album = 8; //专辑信息
+	google.protobuf.Timestamp create_time = 10; // 创建时间
+	double duration = 9; // 时长
+	int32 size = 11; // 大小
+	bool is_collection = 12; //是否收藏
+	string share_url = 13; // 分享url
+
+}
+
+// 专辑添加法音
+message AlbumVoice {
+	int32 album_id = 1; //专辑 id
+	repeated int32 voice_id = 2; //法音id
+}
+
+// 公告
+message Notice {
+	int32 id = 1; // ID
+	string title = 2; // 标题
+	string detail = 3; // 内容
+	google.protobuf.Timestamp create_time = 4; // 时间
+	int32 status = 5; // 状态
+	string user_name = 6; // 发布人
+}
+
+// 首页数据
+
+message Index {
+	repeated Banner banners = 1; //首页banner
+	repeated Notice notices = 2; // 首页公告
+	Desc desc = 3; //龙恩寺简介
+	google.protobuf.Timestamp start_time = 4; //直播开示时间
+}
+
+// 搜索数据
+message MetaData {
+	int32 obj_type = 2; // 跳转对象  (1, "开示"), (2, "电子书"), (3, "视频"), (4, "问答"), (5, "法音专辑")
+	int32 obj_id = 3; // 跳转对象的id
+	string title = 4; // 展示标题
+	string desc = 5; // 展示时简单描述
+	bool is_vipuser = 6; // 是否会员权限
+    string detail = 8; // 搜索内容
+	google.protobuf.Timestamp create_time = 7; // 对象的创建时间
+}
+
+// 热门搜索
+message HotKey {
+	string key = 1;
+}
