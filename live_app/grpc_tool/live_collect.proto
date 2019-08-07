@@ -1,6 +1,6 @@
 syntax = "proto3";
 package live_app;
-import public "live_longensi.proto"
+import public "live_longensi.proto";
 
 //地址 120.77.237.231  
 //端口 9274 
@@ -9,7 +9,7 @@ import public "live_longensi.proto"
 message PlayBackColletReq {
   int32 user_id = 1; //固定值取1
   int32 play_back_id = 2;
-  int32 method = 3; //1 添加收藏 2 删除收藏
+  string method = 3; //add 添加收藏 delete 删除收藏 
 }
 
 message PlayBackColletRsp {

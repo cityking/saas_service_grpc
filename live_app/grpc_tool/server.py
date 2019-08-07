@@ -11,6 +11,7 @@ from concurrent import futures
 
 from live_app.grpc_tool import live_pb2, live_pb2_grpc
 from live_app.grpc_tool import live_longensi_pb2, live_longensi_pb2_grpc
+from live_app.grpc_tool import live_collect_pb2, live_collect_pb2_grpc
 from live_app.models import LiveStream, LiveRecord, LivePlayBack, PlayStream
 from live_app.qiniu_tool import query_stream, create_stream, pull_stream_url,\
     get_play_urls, disable_stream, query_historyactivity, play_back as get_play_back
@@ -309,6 +310,56 @@ class LiveFront(live_longensi_pb2_grpc.LiveFrontServicer):
         else:
             return live_longensi_pb2.SinglePlayBackRsp(status=400,
                     msg='视频不存在')
+
+class PlayBackCollect(live_collect_pb2_grpc.PlayBackCollectServicer):
+
+
+    def GetCollectedList(self, request, context):
+        user_id = request.user_id
+        page = request.page
+        page_size = request.page_size
+        play_backs = LivePlayBack.objects.filter(user_id=user_id, collected=1).order_by('-create_time')
+        count = play_backs.count()
+        if page and page_size:
+            play_backs = play_backs[(page-1)*page_size:page*page_size]
+        play_back_rsp = live_collect_pb2.PlayBackRsp(count=count)
+        for play_back in play_backs:
+            play_info = play_back_rsp.play_back_list.add()
+            play_info.play_back_id = play_back.id
+            play_info.title = play_back.title
+            play_info.speaker = play_back.speaker
+            play_info.image_url = play_back.image_url
+            play_info.details = play_back.details
+            play_info.create_time = play_back.create_time.strftime('%Y-%m-%d %H:%M:%S')
+            play_info.last_time = play_back.last_time
+            play_info.is_vip = play_back.is_vip
+            play_info.media_url = play_back.media_url
+            play_info.play_count = play_back.play_count
+            play_info.collected = play_back.collected
+        play_back_rsp.status = 200
+
+        return play_back_rsp
+
+    def Collect(self, request, context):
+        user_id = request.user_id
+        play_back_id = request.play_back_id
+        method = request.method
+
+        play_back = LivePlayBack.objects.filter(user_id=user_id,
+                id=play_back_id).first()
+        if play_back:
+            if method == 'add':
+                play_back.collected = 1
+            elif method == 'delete':
+                play_back.collected = 0
+            play_back.save()
+            rsp = live_collect_pb2.PlayBackColletRsp(status=200,
+                    msg='添加成功',
+                    play_back_id=play_back.id,
+                    collected=play_back.collected)
+            return rsp
+        else:
+            return live_collect_pb2.PlayBackColletRsp(status=400, msg='视频不存在')
 
 
 

@@ -2,6 +2,7 @@ import grpc
 import json
 from . import live_pb2, live_pb2_grpc
 from . import live_longensi_pb2, live_longensi_pb2_grpc
+from . import live_collect_pb2, live_collect_pb2_grpc
 from live_app.models import LiveStream
 
 #_HOST = 'localhost'
@@ -162,6 +163,25 @@ def get_play_back(user_id, page, page_size):
     response = client.GetPlayBackList.future(play_back_req)
     response = response.result()
     return response
+
+def get_play_back_collected(user_id, page, page_size):
+    client = live_collect_pb2_grpc.PlayBackCollectStub(channel=conn)
+    play_back_req = live_longensi_pb2.PlayBackReq(user_id=user_id,
+            page=page,
+            page_size=page_size)
+    response = client.GetCollectedList.future(play_back_req)
+    response = response.result()
+    return response
+
+def play_back_collect(user_id, play_back_id, method):
+    client = live_collect_pb2_grpc.PlayBackCollectStub(channel=conn)
+    play_back_req = live_collect_pb2.PlayBackColletReq(user_id=user_id,
+            play_back_id=play_back_id,
+            method=method)
+    response = client.Collect.future(play_back_req)
+    response = response.result()
+    return response
+
 
 def add_play_record(user_id, play_back_id):
     client = live_longensi_pb2_grpc.LiveFrontStub(channel=conn)
