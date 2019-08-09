@@ -10,7 +10,7 @@ import urllib.parse
 import rsa
 import base64
 import requests
-
+import paypalrestsdk
 # 三方库
 import requests
 
@@ -500,4 +500,67 @@ class AliPay(models.Model):
             return True
         return False
 
+class PayPalPay(models.Model):
+    name = models.CharField(max_length=20,verbose_name='名称')
+    client_id = models.CharField(max_length=200)
+    client_secret = models.CharField(max_length=200)
+    return_url = models.CharField(max_length=500, null=True, blank=True)
+    cancel_url = models.CharField(max_length=500, null=True,blank=True)
+
+    def __str__(self):
+        return self.name
+
+    def set_config(self):
+        paypalrestsdk.configure({
+          'mode': 'sandbox', #sandbox or live
+          'client_id': self.client_id,
+          'client_secret': self.client_secret })
+    
+    def create_payment(self, items, total, description):
+        '''
+        items 格式
+          [{"name": name,
+            "sku": order_no,
+            "price": price,
+            "currency": "USD",
+            "quantity": quantity}]       
+        '''
+        self.set_config()
+        payment = paypalrestsdk.Payment({
+            "intent": "sale",
+            "payer": {
+                "payment_method": "paypal"},
+            "redirect_urls": {
+                "return_url": self.return_url,
+                "cancel_url": self.cancel_url},
+            "transactions": [{
+                "item_list": {
+                    "items": items},
+                "amount": {
+                    "total": total,
+                    "currency": "USD"},
+                "description": description}]})
+        if payment.create():
+          print("Payment created successfully")
+          #payment.execute({"payer_id": "DUFRQ8GWYMJXC"})
+        else:
+          print(payment.error)
+        
+        for link in payment.links:
+            if link.rel == "approval_url":
+                # Convert to str to avoid Google App Engine Unicode issue
+                # https://github.com/paypal/rest-api-sdk-python/pull/58
+                approval_url = str(link.href)
+                print("Redirect for approval: %s" % (approval_url))
+                return approval_url
+    
+    def payment_excute(self, paymentId, PayerID):
+        payment = paypalrestsdk.Payment.find(paymentId)
+        
+        if payment.execute({"payer_id": PayerID}):
+          print("Payment execute successfully")
+          return True
+        else:
+          print(payment.error) # Error Hash
+    
 
