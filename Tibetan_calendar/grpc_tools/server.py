@@ -65,7 +65,15 @@ class Calendar(calendar_pb2_grpc.CalendarServiceServicer):
             proto_calendar.gregorian = int(calendar.gregorian)
             proto_calendar.chinese = int(calendar.chinese)
             proto_calendar.tibetan = int(calendar.tibetan)
+            proto_calendar.tibetanYear = calendar.tibetan[:4]
+            proto_calendar.tibetanMonth = calendar.tibetan[4:6]
+            proto_calendar.tibetanDay = calendar.tibetan[6:8]
             proto_calendar.holiday = calendar.holiday
+            proto_calendar.content = calendar.mark
+            proto_calendar.shareUrl = calendar.shareUrl
+            proto_calendar.tibetanYear = calendar.tibetanYear
+            proto_calendar.tibetanMonth = calendar.tibetanMonth
+            proto_calendar.tibetanDay = calendar.tibetanDay
             proto_calendar.img = calendar.img
         return resp
     def getGregorianRange(self, request, context):

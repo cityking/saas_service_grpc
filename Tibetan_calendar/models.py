@@ -1,6 +1,6 @@
 import datetime
 from django.db import models
-from Tibetan_calendar.grpc_tools.client import get_calendar_list 
+from Tibetan_calendar.grpc_tools.client import get_calendar_list
 
 week_day_list = ['一', '二','三','四','五','六','日']
 
@@ -10,8 +10,12 @@ class TibetanCalendar(models.Model):
     chinese = models.CharField(max_length=20,verbose_name='农历')
     tibetan = models.CharField(max_length=20,verbose_name='藏历')
     holiday = models.CharField(max_length=200,null=True, verbose_name='节日')
+    shareUrl = models.CharField(max_length=200,null=True, verbose_name='分享链接')
     mark = models.CharField(max_length=500,null=True, verbose_name='备注')
     img = models.CharField(max_length=200,null=True, verbose_name='日期主题图片')
+    tibetanYear = models.CharField(max_length=200,null=True, verbose_name='藏历年')
+    tibetanMonth = models.CharField(max_length=200,null=True, verbose_name='藏历月')
+    tibetanDay = models.CharField(max_length=200,null=True, verbose_name='藏历日')
     year = models.IntegerField('年', default=2019)
     month = models.IntegerField('月', default=1)
 
@@ -36,6 +40,11 @@ class TibetanCalendar(models.Model):
                         tibetan=day.tibetan,
                         holiday=day.holiday,
                         img=day.img,
+                        mark=day.content,
+                        shareUrl=day.shareUrl,
+                        tibetanYear=day.tibetanYear,
+                        tibetanMonth=day.tibetanMonth,
+                        tibetanDay=day.tibetanDay,
                         year=year,
                         month=month)
             return True
@@ -60,7 +69,7 @@ class TibetanCalendar(models.Model):
             return None
 
 
-        
+
 
 
     def week_day(self):
@@ -78,11 +87,11 @@ class TibetanCalendar(models.Model):
                 month=self.month,
                 mark=self.mark,
                 week_day=self.week_day())
-        
-        
-    
 
 
 
 
-          
+
+
+
+
