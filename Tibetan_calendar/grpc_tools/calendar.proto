@@ -3,7 +3,7 @@ package com.zhibeifw.proto;
 option optimize_for = SPEED;
 option java_generic_services = false;
 
-import public "common.proto";
+import public "common_info.proto";
 
 //日历
 message ProtoCalendar {

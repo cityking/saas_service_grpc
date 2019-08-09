@@ -13,19 +13,19 @@ from google.protobuf import symbol_database as _symbol_database
 _sym_db = _symbol_database.Default()
 
 
-from . import common_pb2 as common__pb2
+from . import common_info_pb2 as common__info__pb2
 
-from .common_pb2 import *
+from .common_info_pb2 import *
 
 DESCRIPTOR = _descriptor.FileDescriptor(
   name='calendar.proto',
   package='com.zhibeifw.proto',
   syntax='proto3',
   serialized_options=_b('H\001\210\001\000'),
-  serialized_pb=_b('\n\x0e\x63\x61lendar.proto\x12\x12\x63om.zhibeifw.proto\x1a\x0c\x63ommon.proto\"\xc4\x01\n\rProtoCalendar\x12\x11\n\tgregorian\x18\x01 \x01(\x05\x12\x0f\n\x07\x63hinese\x18\x02 \x01(\x05\x12\x0f\n\x07tibetan\x18\x03 \x01(\x05\x12\x0f\n\x07holiday\x18\x04 \x01(\t\x12\x10\n\x08shareUrl\x18\x05 \x01(\t\x12\x0f\n\x07\x63ontent\x18\x06 \x01(\t\x12\x0b\n\x03img\x18\x07 \x01(\t\x12\x13\n\x0btibetanYear\x18\x08 \x01(\t\x12\x14\n\x0ctibetanMonth\x18\t \x01(\t\x12\x12\n\ntibetanDay\x18\n \x01(\t\"/\n\x10ProtoCalendarReq\x12\x0c\n\x04year\x18\x02 \x01(\x05\x12\r\n\x05month\x18\x03 \x01(\x05\"f\n\x15ProtoCalendarListResp\x12\x0e\n\x06result\x18\x01 \x01(\x05\x12\x0c\n\x04\x64\x65sc\x18\x02 \x01(\t\x12/\n\x04list\x18\x03 \x03(\x0b\x32!.com.zhibeifw.proto.ProtoCalendar\"P\n\x16ProtoCalendarRangeResp\x12\x0e\n\x06result\x18\x01 \x01(\x05\x12\x0c\n\x04\x64\x65sc\x18\x02 \x01(\t\x12\x0c\n\x04\x66rom\x18\x03 \x01(\x05\x12\n\n\x02to\x18\x04 \x01(\x05\x32\xcf\x01\n\x0f\x43\x61lendarService\x12Y\n\x04list\x12$.com.zhibeifw.proto.ProtoCalendarReq\x1a).com.zhibeifw.proto.ProtoCalendarListResp\"\x00\x12\x61\n\x11getGregorianRange\x12\x1e.com.zhibeifw.proto.ProtoEmpty\x1a*.com.zhibeifw.proto.ProtoCalendarRangeResp\"\x00\x42\x05H\x01\x88\x01\x00P\x00\x62\x06proto3')
+  serialized_pb=_b('\n\x0e\x63\x61lendar.proto\x12\x12\x63om.zhibeifw.proto\x1a\x11\x63ommon_info.proto\"\xc4\x01\n\rProtoCalendar\x12\x11\n\tgregorian\x18\x01 \x01(\x05\x12\x0f\n\x07\x63hinese\x18\x02 \x01(\x05\x12\x0f\n\x07tibetan\x18\x03 \x01(\x05\x12\x0f\n\x07holiday\x18\x04 \x01(\t\x12\x10\n\x08shareUrl\x18\x05 \x01(\t\x12\x0f\n\x07\x63ontent\x18\x06 \x01(\t\x12\x0b\n\x03img\x18\x07 \x01(\t\x12\x13\n\x0btibetanYear\x18\x08 \x01(\t\x12\x14\n\x0ctibetanMonth\x18\t \x01(\t\x12\x12\n\ntibetanDay\x18\n \x01(\t\"/\n\x10ProtoCalendarReq\x12\x0c\n\x04year\x18\x02 \x01(\x05\x12\r\n\x05month\x18\x03 \x01(\x05\"f\n\x15ProtoCalendarListResp\x12\x0e\n\x06result\x18\x01 \x01(\x05\x12\x0c\n\x04\x64\x65sc\x18\x02 \x01(\t\x12/\n\x04list\x18\x03 \x03(\x0b\x32!.com.zhibeifw.proto.ProtoCalendar\"P\n\x16ProtoCalendarRangeResp\x12\x0e\n\x06result\x18\x01 \x01(\x05\x12\x0c\n\x04\x64\x65sc\x18\x02 \x01(\t\x12\x0c\n\x04\x66rom\x18\x03 \x01(\x05\x12\n\n\x02to\x18\x04 \x01(\x05\x32\xcf\x01\n\x0f\x43\x61lendarService\x12Y\n\x04list\x12$.com.zhibeifw.proto.ProtoCalendarReq\x1a).com.zhibeifw.proto.ProtoCalendarListResp\"\x00\x12\x61\n\x11getGregorianRange\x12\x1e.com.zhibeifw.proto.ProtoEmpty\x1a*.com.zhibeifw.proto.ProtoCalendarRangeResp\"\x00\x42\x05H\x01\x88\x01\x00P\x00\x62\x06proto3')
   ,
-  dependencies=[common__pb2.DESCRIPTOR,],
-  public_dependencies=[common__pb2.DESCRIPTOR,])
+  dependencies=[common__info__pb2.DESCRIPTOR,],
+  public_dependencies=[common__info__pb2.DESCRIPTOR,])
 
 
 
@@ -119,8 +119,8 @@ _PROTOCALENDAR = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=53,
-  serialized_end=249,
+  serialized_start=58,
+  serialized_end=254,
 )
 
 
@@ -157,8 +157,8 @@ _PROTOCALENDARREQ = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=251,
-  serialized_end=298,
+  serialized_start=256,
+  serialized_end=303,
 )
 
 
@@ -202,8 +202,8 @@ _PROTOCALENDARLISTRESP = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=300,
-  serialized_end=402,
+  serialized_start=305,
+  serialized_end=407,
 )
 
 
@@ -254,8 +254,8 @@ _PROTOCALENDARRANGERESP = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=404,
-  serialized_end=484,
+  serialized_start=409,
+  serialized_end=489,
 )
 
 _PROTOCALENDARLISTRESP.fields_by_name['list'].message_type = _PROTOCALENDAR
@@ -302,8 +302,8 @@ _CALENDARSERVICE = _descriptor.ServiceDescriptor(
   file=DESCRIPTOR,
   index=0,
   serialized_options=None,
-  serialized_start=487,
-  serialized_end=694,
+  serialized_start=492,
+  serialized_end=699,
   methods=[
   _descriptor.MethodDescriptor(
     name='list',
@@ -319,7 +319,7 @@ _CALENDARSERVICE = _descriptor.ServiceDescriptor(
     full_name='com.zhibeifw.proto.CalendarService.getGregorianRange',
     index=1,
     containing_service=None,
-    input_type=common__pb2._PROTOEMPTY,
+    input_type=common__info__pb2._PROTOEMPTY,
     output_type=_PROTOCALENDARRANGERESP,
     serialized_options=None,
   ),

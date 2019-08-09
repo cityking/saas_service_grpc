@@ -12,9 +12,10 @@ from concurrent import futures
 from live_app.grpc_tool import live_pb2, live_pb2_grpc
 from live_app.grpc_tool import live_longensi_pb2, live_longensi_pb2_grpc
 from live_app.grpc_tool import live_collect_pb2, live_collect_pb2_grpc
-from live_app.models import LiveStream, LiveRecord, LivePlayBack, PlayStream
+from live_app.models import LiveStream, LiveRecord, LivePlayBack, PlayStream, PlayBackCollect as PlayBackCollectModel
 from live_app.qiniu_tool import query_stream, create_stream, pull_stream_url,\
     get_play_urls, disable_stream, query_historyactivity, play_back as get_play_back
+from live_app.grpc_tool.search_proto.client import savemetadata, deletemetadata
 from redis_tool import RedisConnector
 
 import hashlib
@@ -140,7 +141,10 @@ class PlayBackManagement(live_pb2_grpc.PlayBackManagementServicer):
         if play_back_title:
             data['live_info'] = play_back_title
         live_record = LivePlayBack.objects.create(**data)
+        live_record.set_last_time()
+        savemetadata(live_record)
         data = dict(status='success')
+
         return data
 
     @json_response
@@ -172,6 +176,10 @@ class PlayBackManagement(live_pb2_grpc.PlayBackManagementServicer):
             data['live_info'] = play_back_title
 
         LivePlayBack.objects.filter(id=play_back_id, user_id=user_id).update(**data)
+        play_backs = LivePlayBack.objects.filter(id=play_back_id, user_id=user_id)
+        for play_back in play_backs:
+            play_back.set_last_time()
+            savemetadata(play_back)
         data = dict(status='success')
         return data
 
@@ -180,6 +188,9 @@ class PlayBackManagement(live_pb2_grpc.PlayBackManagementServicer):
         data = json.loads(request.text)
         play_back_id = data.pop('play_back_id')
         user_id = data.pop('user_id')
+        play_backs = LivePlayBack.objects.filter(id=play_back_id, user_id=user_id)
+        for play_back in play_backs:
+            deletemetadata(play_back)
         LivePlayBack.objects.filter(id=play_back_id, user_id=user_id).delete()
         data = dict(status='success')
         return data
@@ -210,6 +221,7 @@ class PlayBackManagement(live_pb2_grpc.PlayBackManagementServicer):
 
 class LiveFront(live_longensi_pb2_grpc.LiveFrontServicer):
     def GetLatestLive(self, request, context):
+        print('LiveFront/GetLatestLive')
         user_id = request.user_id
         now = datetime.datetime.now()
         live = LiveRecord.objects.filter(user_id=user_id, start_time__gt=now).order_by('start_time').first()
@@ -247,6 +259,9 @@ class LiveFront(live_longensi_pb2_grpc.LiveFrontServicer):
             return live_longensi_pb2.LiveStartTimeRsp(status=400,msg='没有直播信息')
 
     def GetPlayBackList(self, request, context):
+        metadata = dict(context.invocation_metadata())
+        client_id = metadata['user_id']
+
         user_id = request.user_id
         page = request.page
         page_size = request.page_size
@@ -256,6 +271,7 @@ class LiveFront(live_longensi_pb2_grpc.LiveFrontServicer):
             play_backs = play_backs[(page-1)*page_size:page*page_size]
         play_back_rsp = live_longensi_pb2.PlayBackRsp(count=count)
         for play_back in play_backs:
+            collected = play_back.is_collected(client_id)
             play_info = play_back_rsp.play_back_list.add()
             play_info.play_back_id = play_back.id
             play_info.title = play_back.title
@@ -267,7 +283,7 @@ class LiveFront(live_longensi_pb2_grpc.LiveFrontServicer):
             play_info.is_vip = play_back.is_vip
             play_info.media_url = play_back.media_url
             play_info.play_count = play_back.play_count
-            play_info.collected = play_back.collected
+            play_info.collected = collected
         play_back_rsp.status = 200
 
         return play_back_rsp
@@ -287,11 +303,15 @@ class LiveFront(live_longensi_pb2_grpc.LiveFrontServicer):
 
 
     def GetSinglePlayBack(self, request, context):
+        metadata = dict(context.invocation_metadata())
+        client_id = metadata['user_id']
+
         user_id = request.user_id
         play_back_id = request.play_back_id
         play_back = LivePlayBack.objects.filter(user_id=user_id,
                 id=play_back_id).first()
         if play_back:
+            collected = play_back.is_collected(client_id)
             play_info = live_longensi_pb2.SinglePlayBackRsp()
             play_info.play_back.play_back_id = play_back.id
             play_info.play_back.title = play_back.title
@@ -303,7 +323,7 @@ class LiveFront(live_longensi_pb2_grpc.LiveFrontServicer):
             play_info.play_back.is_vip = play_back.is_vip
             play_info.play_back.media_url = play_back.media_url
             play_info.play_back.play_count = play_back.play_count
-            play_info.play_back.collected = play_back.collected
+            play_info.play_back.collected = collected
             play_info.status = 200
 
             return play_info
@@ -312,18 +332,20 @@ class LiveFront(live_longensi_pb2_grpc.LiveFrontServicer):
                     msg='视频不存在')
 
 class PlayBackCollect(live_collect_pb2_grpc.PlayBackCollectServicer):
-
-
     def GetCollectedList(self, request, context):
+        metadata = dict(context.invocation_metadata())
+        client_id = metadata['user_id']
+
         user_id = request.user_id
         page = request.page
         page_size = request.page_size
-        play_backs = LivePlayBack.objects.filter(user_id=user_id, collected=1).order_by('-create_time')
-        count = play_backs.count()
+        collects = PlayBackCollectModel.objects.filter(client_id=client_id)
+        count = collects.count()
         if page and page_size:
-            play_backs = play_backs[(page-1)*page_size:page*page_size]
+            collects = collects[(page-1)*page_size:page*page_size]
         play_back_rsp = live_collect_pb2.PlayBackRsp(count=count)
-        for play_back in play_backs:
+        for collect in collects:
+            play_back = collect.play_back
             play_info = play_back_rsp.play_back_list.add()
             play_info.play_back_id = play_back.id
             play_info.title = play_back.title
@@ -335,28 +357,58 @@ class PlayBackCollect(live_collect_pb2_grpc.PlayBackCollectServicer):
             play_info.is_vip = play_back.is_vip
             play_info.media_url = play_back.media_url
             play_info.play_count = play_back.play_count
-            play_info.collected = play_back.collected
+            play_info.collected = 1
         play_back_rsp.status = 200
 
         return play_back_rsp
 
     def Collect(self, request, context):
+        print('PlayBackCollect/Collect')
+        metadata = dict(context.invocation_metadata())
+        client_id = metadata['user_id']
+
         user_id = request.user_id
         play_back_id = request.play_back_id
         method = request.method
+        print('play_back_id', play_back_id)
+        print('user_id', user_id)
 
         play_back = LivePlayBack.objects.filter(user_id=user_id,
                 id=play_back_id).first()
+
+        collect = PlayBackCollectModel.objects.filter(client_id=client_id,
+                play_back_id=play_back_id,
+                user_id=user_id).first()
         if play_back:
             if method == 'add':
-                play_back.collected = 1
+                if not collect:
+                    collect = PlayBackCollectModel.objects.create(client_id=client_id,
+                            play_back_id=play_back_id,
+                            user_id=user_id)
+                msg = '收藏成功'
+                collected = 1
+
             elif method == 'delete':
-                play_back.collected = 0
-            play_back.save()
+                if collect:
+                    collect.delete()
+                msg = '取消收藏'
+                collected = 0
+            else:
+                if collect:
+                    collect.delete()
+                    msg = '取消收藏'
+                    collected = 0
+                else:
+                    collect = PlayBackCollectModel.objects.create(client_id=client_id,
+                            play_back_id=play_back_id,
+                            user_id=user_id)
+                    msg = '收藏成功'
+                    collected = 1
+
             rsp = live_collect_pb2.PlayBackColletRsp(status=200,
-                    msg='添加成功',
+                    msg=msg,
                     play_back_id=play_back.id,
-                    collected=play_back.collected)
+                    collected=collected)
             return rsp
         else:
             return live_collect_pb2.PlayBackColletRsp(status=400, msg='视频不存在')

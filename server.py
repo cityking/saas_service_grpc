@@ -15,6 +15,7 @@ from live_app.grpc_tool import live_pb2, live_pb2_grpc
 from live_app.grpc_tool import live_longensi_pb2, live_longensi_pb2_grpc
 from live_app.grpc_tool import live_collect_pb2, live_collect_pb2_grpc
 from Tibetan_calendar.grpc_tools import tibetan_calendar_pb2, tibetan_calendar_pb2_grpc
+from Tibetan_calendar.grpc_tools import calendar_pb2, calendar_pb2_grpc
 
 #from tools import tools_pb2, tools_pb2_grpc
 #from tools.handler import ToolsHandler
@@ -190,6 +191,7 @@ def serve():
     live_collect_pb2_grpc.add_PlayBackCollectServicer_to_server(live_server.PlayBackCollect(), grpcServer)
 
     tibetan_calendar_pb2_grpc.add_TibetanCalendarServicer_to_server(tibetan_calendar_server.TibetanCalendar(), grpcServer)
+    calendar_pb2_grpc.add_CalendarServiceServicer_to_server(tibetan_calendar_server.Calendar(), grpcServer)
 
     #短信服务等
     #tools_pb2_grpc.add_ToolsServerServicer_to_server(ToolsHandler(), grpcServer)

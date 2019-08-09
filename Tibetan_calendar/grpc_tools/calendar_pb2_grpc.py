@@ -2,7 +2,7 @@
 import grpc
 
 from . import calendar_pb2 as calendar__pb2
-from . import common_pb2 as common__pb2
+from . import common_info_pb2 as common__info__pb2
 
 
 class CalendarServiceStub(object):
@@ -22,7 +22,7 @@ class CalendarServiceStub(object):
         )
     self.getGregorianRange = channel.unary_unary(
         '/com.zhibeifw.proto.CalendarService/getGregorianRange',
-        request_serializer=common__pb2.ProtoEmpty.SerializeToString,
+        request_serializer=common__info__pb2.ProtoEmpty.SerializeToString,
         response_deserializer=calendar__pb2.ProtoCalendarRangeResp.FromString,
         )
 
@@ -55,7 +55,7 @@ def add_CalendarServiceServicer_to_server(servicer, server):
       ),
       'getGregorianRange': grpc.unary_unary_rpc_method_handler(
           servicer.getGregorianRange,
-          request_deserializer=common__pb2.ProtoEmpty.FromString,
+          request_deserializer=common__info__pb2.ProtoEmpty.FromString,
           response_serializer=calendar__pb2.ProtoCalendarRangeResp.SerializeToString,
       ),
   }

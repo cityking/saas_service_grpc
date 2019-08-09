@@ -13,19 +13,19 @@ from google.protobuf import symbol_database as _symbol_database
 _sym_db = _symbol_database.Default()
 
 
-import common_pb2 as common__pb2
-import article_pb2 as article__pb2
-import buddha_pb2 as buddha__pb2
-import ebook_pb2 as ebook__pb2
-import user_pb2 as user__pb2
-import order_pb2 as order__pb2
+from . import common_pb2 as common__pb2
+from . import article_pb2 as article__pb2
+from . import buddha_pb2 as buddha__pb2
+from . import ebook_pb2 as ebook__pb2
+from . import user_pb2 as user__pb2
+from . import order_pb2 as order__pb2
 
-from common_pb2 import *
-from article_pb2 import *
-from buddha_pb2 import *
-from ebook_pb2 import *
-from user_pb2 import *
-from order_pb2 import *
+from .common_pb2 import *
+from .article_pb2 import *
+from .buddha_pb2 import *
+from .ebook_pb2 import *
+from .user_pb2 import *
+from .order_pb2 import *
 
 DESCRIPTOR = _descriptor.FileDescriptor(
   name='server.proto',

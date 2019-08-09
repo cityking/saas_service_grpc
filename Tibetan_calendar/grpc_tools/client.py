@@ -1,7 +1,7 @@
 import grpc
 import json
 import time
-from . import calendar_pb2, calendar_pb2_grpc
+from . import calendar_pb2, calendar_pb2_grpc, common_info_pb2
 from . import tibetan_calendar_pb2, tibetan_calendar_pb2_grpc
 #import calendar_pb2, calendar_pb2_grpc
 import hashlib
@@ -10,7 +10,7 @@ _HOST = '123.206.17.178'
 _PORT = '50055'
 
 _HOST2 = 'localhost'
-_PORT2 = '8800'
+_PORT2 = '8801'
 
 conn = grpc.insecure_channel(_HOST + ':' + _PORT)
 conn2 = grpc.insecure_channel(_HOST2 + ':' + _PORT2)
@@ -20,6 +20,31 @@ def str_md5(string):
     md.update(string.encode())
     res = md.hexdigest()
     return res
+
+
+def get_gregorian_range():
+    client = calendar_pb2_grpc.CalendarServiceStub(channel=conn)
+    calendar_req = common_info_pb2.ProtoEmpty()
+
+    timestamp = str(int(time.time()))
+    uid = '0'
+    shadow = str_md5(uid+timestamp)
+    metadata = [('x-zhibeifw-millis', timestamp),
+            ('x-zhibeifw-shadow', shadow),
+            ('x-zhibeifw-token', ''),
+            ('x-zhibeifw-uid', uid)]
+
+    response = client.getGregorianRange(calendar_req, metadata=metadata)
+
+    return response
+
+def get_local_gregorian_range():
+    client = calendar_pb2_grpc.CalendarServiceStub(channel=conn2)
+    calendar_req = common_info_pb2.ProtoEmpty()
+
+    response = client.getGregorianRange(calendar_req)
+
+    return response
 
 
 def get_calendar_list(year, month):
@@ -39,7 +64,18 @@ def get_calendar_list(year, month):
     desc = response.desc
     ProtoCalendar_list = response.list
 
-    return ProtoCalendar_list 
+    return ProtoCalendar_list
+
+def get_local_calendar_list(year, month):
+    client = calendar_pb2_grpc.CalendarServiceStub(channel=conn2)
+    calendar_req = calendar_pb2.ProtoCalendarReq(year=year,month=month)
+
+    response = client.list(calendar_req)
+    result = response.result
+    desc = response.desc
+    ProtoCalendar_list = response.list
+
+    return ProtoCalendar_list
 
 def query_calendar(gregorian):
     client = tibetan_calendar_pb2_grpc.TibetanCalendarStub(channel=conn2)
@@ -49,7 +85,7 @@ def query_calendar(gregorian):
     response = client.QueryCalendar(tibetan_calendar_pb2.json(text=text))
     data = json.loads(response.text)
 
-    return data 
+    return data
 
 def update_day():
     client = tibetan_calendar_pb2_grpc.TibetanCalendarStub(channel=conn2)
@@ -63,7 +99,7 @@ def update_day():
     response = client.UpdateDay(tibetan_calendar_pb2.json(text=text))
     data = json.loads(response.text)
 
-    return data 
+    return data
 
 
 if __name__ == '__main__':

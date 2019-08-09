@@ -1,6 +1,7 @@
 from django.db import models
 from live_app.qiniu_tool import get_play_urls, pull_stream_url
 import time
+import requests
 import datetime
 
 # Create your models here.
@@ -103,8 +104,6 @@ class LiveRecord(models.Model):
             self.state = 1
         self.save()
 
-
-
     def get_info(self):
         self.set_state()
         return dict(live_record_id=self.id,
@@ -152,7 +151,6 @@ class PlayStream(models.Model):
                 stream_url=self.stream_url,
                 state=self.state)
 
-
 class LivePlayBack(models.Model):
     user = models.ForeignKey(LiveUser, verbose_name='用户', on_delete=None)
     is_vip = models.IntegerField('是否仅会员观看', default=0)
@@ -169,7 +167,6 @@ class LivePlayBack(models.Model):
     live_info =  models.CharField(max_length=100, null=True,
             verbose_name='直播信息')
     play_count = models.IntegerField('播放次数', default=0)
-    collected = models.IntegerField('收藏', default=0)  #0 未收藏 1 已收藏
 
     def __str__(self):
         return self.title
@@ -188,8 +185,39 @@ class LivePlayBack(models.Model):
                 state=self.state,
                 media_url=self.media_url)
 
+    def is_collected(self, client_id):
+        collect = PlayBackCollect.objects.filter(user=self.user, play_back=self, client_id=client_id)
+        if collect:
+            return 1
+        else:
+            return 0
+
+    def add_last_time(self):
+        url = self.media_url + '?avinfo'
+        resp = requests.get(url)
+        avinfo = resp.json()
+        if 'format' in avinfo and 'duration' in avinfo['format']:
+            duration = avinfo['format']['duration']
+            self.last_time = int(float(duration))
+            self.save()
+
     class Meta:
         verbose_name = "回放"
         verbose_name_plural = verbose_name
         db_table = 'live_play_back'
+
+class PlayBackCollect(models.Model):
+    user = models.ForeignKey(LiveUser, verbose_name='用户', on_delete=None)
+    play_back = models.ForeignKey(LivePlayBack, verbose_name='回放', on_delete=None)
+    client_id = models.IntegerField('客户端user_id', default=0)
+
+    class Meta:
+        verbose_name = "收藏"
+        verbose_name_plural = verbose_name
+        db_table = 'play_back_collect'
+
+
+
+
+
 

@@ -160,7 +160,8 @@ def get_play_back(user_id, page, page_size):
     play_back_req = live_longensi_pb2.PlayBackReq(user_id=user_id,
             page=page,
             page_size=page_size)
-    response = client.GetPlayBackList.future(play_back_req)
+    metadata = [('user_id', '2'),]
+    response = client.GetPlayBackList.future(play_back_req, metadata=metadata)
     response = response.result()
     return response
 
@@ -169,7 +170,8 @@ def get_play_back_collected(user_id, page, page_size):
     play_back_req = live_longensi_pb2.PlayBackReq(user_id=user_id,
             page=page,
             page_size=page_size)
-    response = client.GetCollectedList.future(play_back_req)
+    metadata = [('user_id', '2'),]
+    response = client.GetCollectedList.future(play_back_req, metadata=metadata)
     response = response.result()
     return response
 
@@ -178,7 +180,8 @@ def play_back_collect(user_id, play_back_id, method):
     play_back_req = live_collect_pb2.PlayBackColletReq(user_id=user_id,
             play_back_id=play_back_id,
             method=method)
-    response = client.Collect.future(play_back_req)
+    metadata = [('user_id', '2'),]
+    response = client.Collect.future(play_back_req, metadata=metadata)
     response = response.result()
     return response
 
@@ -195,7 +198,8 @@ def get_single_play_back(user_id, play_back_id):
     client = live_longensi_pb2_grpc.LiveFrontStub(channel=conn)
     play_back_req = live_longensi_pb2.PlayRecordReq(user_id=user_id,
             play_back_id=play_back_id)
-    response = client.GetSinglePlayBack.future(play_back_req)
+    metadata = [('user_id', '2'),]
+    response = client.GetSinglePlayBack.future(play_back_req, metadata=metadata)
     response = response.result()
     return response
 
