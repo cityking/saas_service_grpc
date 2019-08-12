@@ -1,0 +1,49 @@
+syntax = "proto3";
+package paypal;
+
+message Item {
+    string name = 1; //商品名称
+    string sku = 2; //商品编号
+    float price = 3; //商品价格
+    int32 quantity = 4; //商品数量
+}
+
+message PaymentCreateReq {
+    string client_id = 4;
+    float total = 1; //总价
+    repeated Item items = 2; //商品列表
+    string description = 3; //描述
+}
+
+message PaymentCreateRsp {
+    int32 status = 1; //200 成功 400 失败
+    string msg = 2;
+    string paymentId = 3; //与订单绑定
+    string approval_url = 4; //调起PayPal支付的链接
+}
+
+message PaymentExecuteReq {
+    string client_id = 3;
+    string paymentId = 1;
+    string PayerID = 2;
+}
+
+message PaymentExecuteRsp {
+    int32 status = 1;
+    string msg = 2;
+    string result = 3; //sucess 支付成功 fail 支付失败
+    string paymentId = 4; //与订单绑定
+    string approval_url = 5; //支付结果重定向url
+
+}
+
+service PaypalPay {
+    //创建支付
+    rpc PaymentCreate(PaymentCreateReq) returns (PaymentCreateRsp){}
+
+    //支付执行
+    rpc PaymentExecute(PaymentExecuteReq) returns (PaymentExecuteRsp){}
+
+
+}
+

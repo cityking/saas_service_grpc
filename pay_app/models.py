@@ -11,6 +11,7 @@ import rsa
 import base64
 import requests
 import paypalrestsdk
+from paypalrestsdk import Order
 # 三方库
 import requests
 
@@ -183,7 +184,7 @@ class WeixinPay(models.Model):
         data['trade_type'] = 'APP'
         raw = self.unified_order(data)
         print(raw)
-        
+
     def micropay(self, data):
         """
         提交付款码支付
@@ -515,15 +516,26 @@ class PayPalPay(models.Model):
           'mode': 'sandbox', #sandbox or live
           'client_id': self.client_id,
           'client_secret': self.client_secret })
-    
-    def create_payment(self, items, total, description):
+
+    def get_approval_url(self, payment):
+        for link in payment.links:
+            if link.rel == "approval_url":
+                # Convert to str to avoid Google App Engine Unicode issue
+                # https://github.com/paypal/rest-api-sdk-python/pull/58
+                approval_url = str(link.href)
+                print("Redirect for approval: %s" % (approval_url))
+                return approval_url
+
+
+    #创建支付
+    def create_payment(self, items, total, description=''):
         '''
         items 格式
           [{"name": name,
-            "sku": order_no,
+            "sku": goods_no,
             "price": price,
             "currency": "USD",
-            "quantity": quantity}]       
+            "quantity": quantity}]
         '''
         self.set_config()
         payment = paypalrestsdk.Payment({
@@ -545,22 +557,28 @@ class PayPalPay(models.Model):
           #payment.execute({"payer_id": "DUFRQ8GWYMJXC"})
         else:
           print(payment.error)
-        
-        for link in payment.links:
-            if link.rel == "approval_url":
-                # Convert to str to avoid Google App Engine Unicode issue
-                # https://github.com/paypal/rest-api-sdk-python/pull/58
-                approval_url = str(link.href)
-                print("Redirect for approval: %s" % (approval_url))
-                return approval_url
-    
-    def payment_excute(self, paymentId, PayerID):
+          return None, None
+
+        approval_url = self.get_approval_url(payment)
+        return payment, approval_url
+
+    def payment_find(self, paymentId):
+        self.set_config()
         payment = paypalrestsdk.Payment.find(paymentId)
-        
+        return payment
+    def order_find(self, order_no):
+        order = Order.find(order_no)
+        return order
+
+    #支付
+    def payment_excute(self, paymentId, PayerID):
+        payment = self.payment_find(paymentId)
+        approval_url = self.get_approval_url(payment)
         if payment.execute({"payer_id": PayerID}):
-          print("Payment execute successfully")
-          return True
+            print("Payment execute successfully")
+            return True, payment, approval_url
         else:
-          print(payment.error) # Error Hash
-    
+            print(payment.error) # Error Hash
+            return False, None, approval_url
+
 

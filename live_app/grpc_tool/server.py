@@ -339,7 +339,7 @@ class PlayBackCollect(live_collect_pb2_grpc.PlayBackCollectServicer):
         user_id = request.user_id
         page = request.page
         page_size = request.page_size
-        collects = PlayBackCollectModel.objects.filter(client_id=client_id)
+        collects = PlayBackCollectModel.objects.filter(client_id=client_id).order_by('-id')
         count = collects.count()
         if page and page_size:
             collects = collects[(page-1)*page_size:page*page_size]

@@ -6,4 +6,5 @@ urlpatterns = [
     path('weixin_refund/', views.WeixinRefundView.as_view()),
     path('weixin_micropay/', views.WeixinMicropayView.as_view()),
     path('pay_callback/', views.PayCallbackView.as_view()),
+    path('paypal_callback/', views.PayPalCallbackView.as_view()),
 ]

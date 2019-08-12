@@ -9,18 +9,19 @@ from concurrent import futures
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'saas_servcie.settings')
 django.setup()
 
-from grpc_tool import pay_pb2, pay_pb2_grpc
+from grpc_tool import pay_pb2, pay_pb2_grpc, paypal_pb2, paypal_pb2_grpc
 from message_app.grpc_tool import charge_pb2, charge_pb2_grpc
 from live_app.grpc_tool import live_pb2, live_pb2_grpc
 from live_app.grpc_tool import live_longensi_pb2, live_longensi_pb2_grpc
 from live_app.grpc_tool import live_collect_pb2, live_collect_pb2_grpc
+
 from Tibetan_calendar.grpc_tools import tibetan_calendar_pb2, tibetan_calendar_pb2_grpc
 from Tibetan_calendar.grpc_tools import calendar_pb2, calendar_pb2_grpc
 
 #from tools import tools_pb2, tools_pb2_grpc
 #from tools.handler import ToolsHandler
 from redis_tool import RedisConnector
-from pay_app.models import WeixinPay as WeixinPayM, AliPay as AliPayM
+from pay_app.models import WeixinPay as WeixinPayM, AliPay as AliPayM, PayPalPay
 from message_app.grpc_tool import server as message_server
 from live_app.grpc_tool import server as live_server
 from Tibetan_calendar.grpc_tools import server as tibetan_calendar_server
@@ -89,6 +90,25 @@ def pre_request_ali_pay(func):
 
         context.pay = pay
         context.data = data
+        return func(view, request, context)
+    return wrapper
+
+def pre_request_paypal_pay(func):
+    """paypal支付"""
+    def wrapper(view, request, context):
+        client_id = request.client_id
+        if not client_id:
+            rsp = paypal_pb2.PaymentCreateRsp()
+            rsp.status = 400
+            rsp.msg = '缺少参数client_id'
+            return rsp
+        pay = PayPalPay.objects.filter(client_id=client_id).first()
+
+
+        if not pay:
+            return paypal_pb2.PaymentCreateRsp(status = 400, msg='支付信息未登记')
+
+        context.pay = pay
         return func(view, request, context)
     return wrapper
 
@@ -168,7 +188,37 @@ class AliPay(pay_pb2_grpc.AliPayServicer):
         res_data = json.dumps(res)
         return pay_pb2.json(text=res_data)
 
+class PaypalPay(paypal_pb2_grpc.PaypalPayServicer):
+    @pre_request_paypal_pay
+    def PaymentCreate(self, request, context):
+        pay = context.pay
+        items = request.items
+        items = [dict(name=item.name,
+            sku=item.sku,
+            price=item.price,
+            currency='USD',
+            quantity=item.quantity) for item in items]
+        print(items)
+        payment, approval_url = pay.create_payment(items, request.total, request.description)
+        if payment:
+            return paypal_pb2.PaymentCreateRsp(status=200,
+                    paymentId=payment.id,
+                    approval_url=approval_url)
+        else:
+            return paypal_pb2.PaymentCreateRsp(status=400, msg='支付订单创建失败')
 
+    @pre_request_paypal_pay
+    def PaymentExecute(self, request, context):
+        pay = context.pay
+
+        res, payment, approval_url = pay.payment_excute(request.paymentId, request.PayerID)
+        if res:
+            return paypal_pb2.PaymentExecuteRsp(status=200,
+                    paymentId=payment.id,
+                    approval_url=approval_url,
+                    result='success')
+        else:
+            return paypal_pb2.PaymentExecuteRsp(status=400, msg='支付失败')
 
 
 
@@ -179,6 +229,8 @@ def serve():
     # 在服务器中添加派生的接口服务（自己实现了处理函数）
     pay_pb2_grpc.add_WeixinPayServicer_to_server(WeixinPay(), grpcServer)
     pay_pb2_grpc.add_AliPayServicer_to_server(AliPay(), grpcServer)
+
+    paypal_pb2_grpc.add_PaypalPayServicer_to_server(PaypalPay(), grpcServer)
     #pay_pb2_grpc.add_TibetanCalendarServicer_to_server(TibetanCalendar(), grpcServer)
 
     charge_pb2_grpc.add_MessageChargeServicer_to_server(message_server.MessageCharge(),

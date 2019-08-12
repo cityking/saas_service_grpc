@@ -1,11 +1,13 @@
 from django.shortcuts import render
 from django.http import JsonResponse, StreamingHttpResponse, HttpResponse
+from django.http import HttpResponseRedirect
 from django.utils.encoding import escape_uri_path
 from django.views import View
 from django.contrib.auth.hashers import make_password, check_password
 from django.db.models import Q
 from pay_app.message_grpc.client import check_order
 from pay_app.models import WeixinPay, xml_to_dict
+from pay_app.models import PayPalPay
 import datetime
 import random
 import os
@@ -107,5 +109,18 @@ class PayCallbackView(View):
         data = req.GET
         print(data)
         import pdb;pdb.set_trace()
+
+class PayPalCallbackView(View):
+    def get(self, req):
+        data = req.GET
+        paymentId = data['paymentId']
+        PayerID = data['PayerID']
+        token = data['token']
+        pay = PayPalPay.objects.all().first()
+        res, payment = pay.payment_excute(paymentId, PayerID)
+        url = 'https://www.sandbox.paypal.com/cgi-bin/webscr?cmd=_express-checkout&token=%s' % token
+        return HttpResponseRedirect(url)
+
+
 
 
