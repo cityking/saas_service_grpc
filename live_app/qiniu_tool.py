@@ -9,14 +9,14 @@ access_key = "4o8fd-5QVgP1Q5hO8uidQKlmPVT1cH01DDUf3GJU" # 替换成自己 Qiniu 
 secret_key = "d9q_qGPQ3jEfzjcd5h7cDoyKIMQADxPS7kMkglry" # 替换成自己 Qiniu 账号的 SecretKey
 hub_name = "ruketang" # 直播空间名称， Hub 必须事先存在
 stream_url = 'http://pili.qiniuapi.com/v2/hubs/%s/streams' % hub_name
-RTMPPublishDomain = 'pili-publish.realtime-live.iruyue.tv' #推流域名 
-RTMPPlayDomain = 'pili-live-rtmp.realtime-live.iruyue.tv' #RTMP播放域名 
-HLSPlayDomain = 'pili-live-hls.realtime-live.iruyue.tv' #HLS播放域名 
-HDLPlayDomain = 'pili-live-hdl.realtime-live.iruyue.tv' #HDL播放域名 
+RTMPPublishDomain = 'pili-publish.realtime-live.iruyue.tv' #推流域名
+RTMPPlayDomain = 'pili-live-rtmp.realtime-live.iruyue.tv' #RTMP播放域名
+HLSPlayDomain = 'pili-live-hls.realtime-live.iruyue.tv' #HLS播放域名
+HDLPlayDomain = 'pili-live-hdl.realtime-live.iruyue.tv' #HDL播放域名
 
 domain = 'http://pili-vod.realtime-live.iruyue.tv/'
 def get_author():
-    author = qiniu.auth.QiniuMacAuth(access_key, secret_key) 
+    author = qiniu.auth.QiniuMacAuth(access_key, secret_key)
     author = qiniu.auth.QiniuMacRequestsAuth(author)
     return author
 
@@ -38,7 +38,7 @@ def query_stream(stream_title):
         stream_title:直播流名称
     '''
     author = get_author()
-    stream_title = string_to_base64(stream_title) 
+    stream_title = string_to_base64(stream_title)
     url = stream_url + '/%s' % stream_title
     headers = {'Content-Type':'application/x-www-form-urlencoded'}
     res = requests.get(url, headers=headers, auth=author)
@@ -68,47 +68,47 @@ def query_stream_list(liveonly='false', prefix='', limit=10, marker=''):
 def create_stream(stream_title):
     author = get_author()
 
-    url = stream_url 
+    url = stream_url
     headers = {'Content-Type':'application/json'}
     data = {'key':stream_title}
     res = requests.post(url, headers=headers, json=data, auth=author)
     content = res.json()
     content['status'] = res.status_code
 
-    return content 
+    return content
 
 def disable_stream(stream_title, disabledTill):
     '''
-    禁止推流和播流 
+    禁止推流和播流
     参数:
         stream_title:直播流名称
         disabledTill:整数，Unix 时间戳，表示流禁播的结束时间，单位 s(秒)，-1 表示永久禁播。0 表示解除禁播
     '''
 
     author = get_author()
-    stream_title = string_to_base64(stream_title) 
+    stream_title = string_to_base64(stream_title)
     url = stream_url + '/%s/disabled' % stream_title
 
     headers = {'Content-Type':'application/json'}
     data = {
-        "disabledTill": disabledTill 
+        "disabledTill": disabledTill
     }
     res = requests.post(url, headers=headers, json=data, auth=author)
     content = res.json()
     content['status'] = res.status_code
 
-    return content 
+    return content
 
 def query_stream_live(stream_title):
     author = get_author()
-    stream_title = string_to_base64(stream_title) 
+    stream_title = string_to_base64(stream_title)
     url = stream_url + '/%s/live' % stream_title
     headers = {'Content-Type':'application/x-www-form-urlencoded'}
     res = requests.get(url, headers=headers, auth=author)
     content = res.json()
     content['status'] = res.status_code
 
-    return content 
+    return content
 
 def query_stream_lives(streams):
     author = get_author()
@@ -120,8 +120,8 @@ def query_stream_lives(streams):
 
 def query_historyactivity(stream_title, start_time, end_time):
     author = get_author()
-    stream_title = string_to_base64(stream_title) 
-    if start_time: 
+    stream_title = string_to_base64(stream_title)
+    if start_time:
         start = changetime(start_time) - 60
     else:
         start = 0
@@ -141,7 +141,7 @@ def query_historyactivity(stream_title, start_time, end_time):
         item['end_time'] = strftime(item['end'], '%Y-%m-%d %H:%M:%S')
         item['play_back_title'] = strftime(item['start'], '直播回放(%Y%m%d%H%S)')
 
-    return content 
+    return content
 
 def play_back(stream_title, start_time, end_time, fname=None):
     history = query_historyactivity(stream_title, start_time, end_time)
@@ -157,7 +157,7 @@ def play_back(stream_title, start_time, end_time, fname=None):
     EncodedStreamTitle = string_to_base64(stream_title)
     url = stream_url + '/%s/saveas' % EncodedStreamTitle
     headers = {'Content-Type':'application/json'}
-    
+
     data = {'start':start,
             'end':end}
     if fname:
@@ -168,7 +168,7 @@ def play_back(stream_title, start_time, end_time, fname=None):
     if res.status_code == 200:
         content['fname'] = domain + content['fname']
 
-    return content 
+    return content
 
 def pull_stream_url(stream):
     return 'rtmp://%s/%s/%s' % (RTMPPublishDomain, hub_name, stream)
@@ -191,11 +191,11 @@ def get_play_urls(stream):
 
 
 if __name__ == '__main__':
-    datas = query_stream('test11111')
+    #datas = query_stream('test11111')
     #datas = query_stream_list()
     #datas = create_stream('test2')
     #datas = disable_stream('test2', 1560742936)
-    #datas = query_stream_live('test2')
+    datas = query_stream_live('livestream')
     #datas = query_stream_lives(['test', 'test2'])
     #datas = query_historyactivity('livestream', 0, 0)
     #datas = pull_stream_url('livestream')

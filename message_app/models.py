@@ -97,13 +97,14 @@ class Order(models.Model):
             if data['return_code'] == 'SUCCESS' and data['return_msg'] == 'OK':
                 return data['code_url']
             else:
-                return None 
+                return None
         elif self.pay_type == 1:
             data = precreate(app_id, self.order_no, self.price, '短信充值')
+            print(data)
             if data['alipay_trade_precreate_response']['code'] == '10000' and data['alipay_trade_precreate_response']['msg'] == 'Success':
                 return data['alipay_trade_precreate_response']['qr_code']
             else:
-                return None 
+                return None
 
     def query_pay_state(self):
         app_id = self.get_app_id()
@@ -113,21 +114,21 @@ class Order(models.Model):
             if data['alipay_trade_query_response']['code'] == '10000' and\
                 data['alipay_trade_query_response']['msg'] == 'Success' and\
                 data['alipay_trade_query_response']['trade_status']:
-                return True 
+                return True
             else:
-                return None 
+                return None
 
         elif self.pay_type == 2:
             data = weixin_order_query(app_id, self.order_no)
             if data['return_code'] == 'SUCCESS' and data['return_msg'] == 'OK' and data['trade_state'] == 'SUCCESS':
-                return True 
+                return True
             else:
-                return None 
+                return None
 
 
     def get_info(self):
         return dict(order_no=self.order_no,
-                business=self.business.name, 
+                business=self.business.name,
                 charge_num=self.charge_num,
                 price=self.price,
                 pay_type=self.pay_type)

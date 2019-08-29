@@ -101,6 +101,7 @@ WSGI_APPLICATION = 'saas_servcie.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
+        'HOST': '120.77.237.231',
         'NAME': 'saas_service_test',
         'USER': 'saas_user',
         'PASSWORD': 'saas_password**&&^^',

@@ -40,6 +40,7 @@ class LiveManagement(live_pb2_grpc.LiveManagementServicer):
         for play_stream in play_streams:
             play_stream['user_id'] = data['user_id']
             play_stream['live_record_id'] = live_record.id
+            play_stream['stream_name'] = play_stream['stream_name'] + '_' + play_stream['live_type']
             PlayStream.objects.create(**play_stream)
         data = dict(status='success')
         return data
@@ -48,7 +49,7 @@ class LiveManagement(live_pb2_grpc.LiveManagementServicer):
     def GetLiveList(self, request, context):
         data = json.loads(request.text)
         user_id = data['user_id']
-        live_records = LiveRecord.objects.filter(user_id=user_id)
+        live_records = LiveRecord.objects.filter(user_id=user_id).order_by('-start_time')
 
         count = live_records.count()
 
@@ -151,7 +152,7 @@ class PlayBackManagement(live_pb2_grpc.PlayBackManagementServicer):
     def GetPlayBackList(self, request, context):
         data = json.loads(request.text)
         user_id = data['user_id']
-        live_playbacks = LivePlayBack.objects.filter(user_id=user_id)
+        live_playbacks = LivePlayBack.objects.filter(user_id=user_id).order_by('-create_time')
 
         page = int(data.pop('page', 0))
         page_size = int(data.pop('page_size', 0))
@@ -224,9 +225,11 @@ class LiveFront(live_longensi_pb2_grpc.LiveFrontServicer):
         print('LiveFront/GetLatestLive')
         user_id = request.user_id
         now = datetime.datetime.now()
-        live = LiveRecord.objects.filter(user_id=user_id, start_time__gt=now).order_by('start_time').first()
+        #live = LiveRecord.objects.filter(user_id=user_id, start_time__gt=now).order_by('start_time').first()
+        live = LiveRecord.get_live()
         if live:
             streams = PlayStream.objects.filter(live_record=live)
+            live.set_state()
             latest_live_rsp = live_longensi_pb2.LatestLiveRsp(live_id=live.id,
                     title=live.title,
                     speaker=live.speaker,
