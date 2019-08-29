@@ -1,5 +1,5 @@
 from django.db import models
-from live_app.qiniu_tool import get_play_urls, pull_stream_url
+from live_app.qiniu_tool import get_play_urls, pull_stream_url, query_stream_live
 import time
 import requests
 import datetime
@@ -96,12 +96,35 @@ class LiveRecord(models.Model):
     def set_state(self):
         now = datetime.datetime.now()
         end = self.start_time + datetime.timedelta(minutes=self.last_time)
-        if now < self.start_time:
-            self.state = 0
-        elif now > end:
-            self.state = 2
+        livestream = LiveStream.objects.filter(pull_stream_url=self.pull_stream_url).first()
+        if livestream:
+            stream_name = livestream.name
+            res = query_stream_live(stream_name)
+            print(res['status'])
+            is_live = True if res['status']==200 else False
+
+
+            if now < self.start_time:
+                self.state = 0
+            elif now >= self.start_time and now <= end:
+                if is_live:
+                    self.state = 1
+                #elif self.state == 0:
+                #    self.state = 0
+                #else:
+                #    self.state = 3
+            elif now > end:
+                if self.state == 1:
+                    self.state = 1 if is_live else 2
+                else:
+                    self.state = 2
         else:
-            self.state = 1
+            if now < self.start_time:
+                self.state = 0
+            elif now > end:
+                self.state = 2
+            else:
+                self.state = 1
         self.save()
 
     def get_info(self):
@@ -117,6 +140,22 @@ class LiveRecord(models.Model):
                 pull_stream_url=self.pull_stream_url,
                 play_streams = self.get_play_streams(),
                 state=self.state)
+
+    @classmethod
+    def get_live(cls):
+        live = cls.objects.filter(state=1).first()
+        if live:
+            return live
+        lives = cls.objects.filter(state=0)
+        for live in lives:
+            live.set_state()
+
+        live = cls.objects.filter(state=1).first()
+        if not live:
+            live = cls.objects.filter(state__in=(0, 3)).order_by('start_time').first()
+
+        return live
+
 
     class Meta:
         verbose_name = "直播记录"
@@ -192,7 +231,7 @@ class LivePlayBack(models.Model):
         else:
             return 0
 
-    def add_last_time(self):
+    def set_last_time(self):
         url = self.media_url + '?avinfo'
         resp = requests.get(url)
         avinfo = resp.json()

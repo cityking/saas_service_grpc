@@ -1,0 +1,6 @@
+FROM saas_service
+COPY saas_service /root/
+WORKDIR /root/saas_service
+CMD locale-gen\
+    && export LANG=en_zh_CN.UTF-8 LANGUAGE=zh_CN.zh LC_ALL=zh_CN.UTF-8\
+    && python server.py
